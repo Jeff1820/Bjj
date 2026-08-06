@@ -1,0 +1,324 @@
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #1c1e21;
+  --muted: #5f6672;
+  --border: #e2e5ea;
+  --accent: #1e6bd6;
+  --success: #1f9d55;
+  --danger: #c0392b;
+  --locked: #9aa0a6;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --panel: #1e2126;
+    --text: #e8eaed;
+    --muted: #9aa0a6;
+    --border: #33373d;
+    --accent: #5b9bf0;
+    --success: #34c073;
+    --danger: #e0604f;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+header.app-header {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 16px 0;
+  text-align: center;
+}
+
+header.app-header h1 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+
+header.app-header p.tagline {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.track-switch {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 16px;
+}
+
+.track-switch button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.track-switch button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Belt roadmap */
+.roadmap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 20px;
+}
+
+.belt-chip {
+  flex: 1 1 140px;
+  min-width: 130px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  position: relative;
+}
+
+.belt-chip .belt-bar {
+  display: block;
+  height: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  margin-bottom: 8px;
+}
+
+.belt-chip .belt-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: block;
+}
+
+.belt-chip .belt-progress {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.belt-chip.selected { border-color: var(--accent); }
+
+.belt-chip.locked { opacity: 0.55; }
+
+.belt-chip .lock-icon {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 0.9rem;
+}
+
+/* Belt detail panel */
+.belt-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.belt-panel-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.belt-panel-header h2 { margin: 0 0 2px; font-size: 1.25rem; }
+
+.belt-panel-header .subtitle { color: var(--muted); font-size: 0.9rem; }
+
+.belt-panel-header .goal { margin: 8px 0 0; font-size: 0.95rem; }
+
+.progress-wrap {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--success);
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.progress-label { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+
+.locked-banner {
+  background: color-mix(in srgb, var(--locked) 12%, var(--panel));
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.complete-banner {
+  background: color-mix(in srgb, var(--success) 14%, var(--panel));
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Tabs inside panel */
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-tabs button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+
+.panel-tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.panel-body { padding: 18px 20px; }
+
+/* Curriculum checklist */
+.category { margin-bottom: 22px; }
+
+.category h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.check-item:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.check-item input {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--success);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.check-item.done span { color: var(--muted); text-decoration: line-through; }
+
+.check-item.disabled { cursor: not-allowed; opacity: 0.6; }
+
+/* Rules tab */
+.rules-section { margin-bottom: 20px; }
+
+.rules-section h3 { margin: 0 0 8px; font-size: 1rem; }
+
+.rules-section ul { margin: 0; padding-left: 22px; }
+
+.rules-section li { margin-bottom: 4px; font-size: 0.95rem; }
+
+.rules-section.legal li::marker { color: var(--success); }
+.rules-section.illegal li::marker { color: var(--danger); }
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.badge.new { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }
+
+table.points {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 420px;
+  font-size: 0.95rem;
+}
+
+table.points td {
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+}
+
+table.points td:last-child { text-align: center; font-weight: 700; }
+
+footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 16px 40px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.reset-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.reset-btn:hover { color: var(--danger); border-color: var(--danger); }
+
+@media (max-width: 600px) {
+  .belt-chip { flex-basis: 100%; }
+  .panel-body { padding: 14px; }
+}
