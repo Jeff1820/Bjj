@@ -12,7 +12,7 @@ const BRAND = {
   name: "PureLab Performance",
   url: "https://purelabperformance.com",
   logo: "purelab-logo.png",
-  tagline: "Sports performance & recovery",
+  tagline: "your sports recovery & performance partner",
 };
 
 const SIGNUP_ENDPOINT = "";
@@ -90,7 +90,7 @@ function renderBrand() {
   host.innerHTML = `
     ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="brand-logo" onerror="this.remove()" />` : ""}
     <span class="brand-text">
-      Sponsored by <strong>${BRAND.name}</strong>${BRAND.tagline ? ` · ${BRAND.tagline}` : ""}
+      Sponsored by <strong>${BRAND.name}</strong>${BRAND.tagline ? ` — ${BRAND.tagline}` : ""}
       ${site ? ` · <a href="${BRAND.url}" target="_blank" rel="noopener">${site}</a>` : ""}
     </span>`;
 }
