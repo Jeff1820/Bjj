@@ -72,7 +72,7 @@ header.app-header p.tagline {
   .brand-logo { height: 72px; }
 }
 
-.brand-bar a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.brand-bar a { color: var(--accent); font-weight: 700; font-size: 1.1rem; text-decoration: none; }
 
 .brand-bar a:hover { text-decoration: underline; }
 
