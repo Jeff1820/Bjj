@@ -1,18 +1,24 @@
 # Using BJJ Tracker as a lead generator for PureLab Performance
 
-## Email gate (required signup)
+## Email gate — three modes (`GATE_MODE` in `app.js`)
 
-The app opens with a lock screen: visitors must enter an email and tick the
-consent checkbox to unlock it (`REQUIRE_EMAIL_TO_UNLOCK` in `app.js`). The app
-stays blurred behind the gate until they do. Two critical notes:
+- **`"full"`** (web/PWA default): lock screen on first visit. Email + marketing
+  consent required to enter the app at all. Maximum capture rate.
+- **`"teaser"`** (use for App Store builds): the first half of the white belt is
+  free to use — checkboxes and videos work. Clicking through the free half, or
+  tapping any locked item, another belt, the Kids track, or the rules tab,
+  raises a popup: email unlocks everything, free, no cost or obligation.
+  Marketing consent is a **separate optional checkbox** — required consent is
+  what gets apps rejected under Apple guideline 5.1.1. Note: even teaser-style
+  email unlocks are reviewed inconsistently by Apple; if rejected, resubmit
+  with `GATE_MODE = "off"` (the optional signup card still collects leads).
+- **`"off"`**: no gate; only the optional signup card.
 
-- **Connect Formspree BEFORE promoting the link.** Until `SIGNUP_ENDPOINT` is
-  set, gated emails are stored only on the visitor's own device — you never
-  receive them.
-- **Turn the gate OFF for App Store builds** (`REQUIRE_EMAIL_TO_UNLOCK = false`).
-  Apple guideline 5.1.1 rejects apps that require a marketing signup to access
-  core functionality. The optional signup card (below) remains and is
-  App-Store-safe.
+**Connect Formspree BEFORE promoting any gated version.** Until
+`SIGNUP_ENDPOINT` is set, submitted emails are stored only on the visitor's
+own device — you never receive them. Teaser-mode submissions arrive tagged
+`source: "bjj-tracker-teaser"` with a `consent: true/false` field — only
+market to addresses with `consent: true`.
 
 The app shows an optional email-signup card ("Level up off the mat") under the
 belt panel. It's a clear opt-in: users type their email and tick a consent
