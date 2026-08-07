@@ -31,11 +31,20 @@ const GATE_MODE = typeof GATE_MODE_OVERRIDE !== "undefined" ? GATE_MODE_OVERRIDE
 const GATE_KEY = "bjj-gate-email";
 
 const state = {
+  sport: localStorage.getItem("bjj-active-sport") || "bjj",
   track: "adult",
   selectedBelt: null,
   tab: "curriculum",
   progress: loadProgress(),
 };
+
+function activeSport() {
+  return SPORTS[state.sport] || SPORTS.bjj;
+}
+
+function activeTracks() {
+  return activeSport().tracks;
+}
 
 function loadProgress() {
   try {
@@ -70,7 +79,7 @@ function beltCompletion(belt) {
 /* A belt is unlocked when every previous belt in its track is complete. */
 function isUnlocked(trackId, index) {
   if (index === 0) return true;
-  const belts = TRACKS[trackId].belts;
+  const belts = activeTracks()[trackId].belts;
   for (let i = 0; i < index; i++) {
     if (!beltCompletion(belts[i]).complete) return false;
   }
@@ -78,7 +87,7 @@ function isUnlocked(trackId, index) {
 }
 
 function currentBelt() {
-  const belts = TRACKS[state.track].belts;
+  const belts = activeTracks()[state.track].belts;
   return belts.find((b) => b.id === state.selectedBelt) || belts[0];
 }
 
@@ -145,12 +154,48 @@ function buildUnlockForm(host, { requireConsent, source }) {
 }
 
 function render() {
+  renderHeader();
   renderBrand();
+  renderSportSwitch();
   renderTrackSwitch();
   renderRoadmap();
   renderPanel();
   renderSignup();
   renderGate();
+}
+
+function renderHeader() {
+  const sport = activeSport();
+  const h1 = document.getElementById("app-title");
+  const tag = document.getElementById("app-tagline");
+  if (h1) h1.textContent = `${sport.emoji} ${sport.appTitle}`;
+  if (tag) tag.textContent = sport.tagline;
+  document.title = sport.appTitle;
+}
+
+function renderSportSwitch() {
+  const el = document.getElementById("sport-switch");
+  if (!el) return;
+  el.innerHTML = "";
+  for (const sport of Object.values(SPORTS)) {
+    const btn = document.createElement("button");
+    btn.textContent = `${sport.emoji} ${sport.label}`;
+    btn.className = sport.id === state.sport ? "active" : "";
+    btn.onclick = () => {
+      if (sport.id === state.sport) return;
+      if (GATE_MODE === "teaser" && gateLocked()) {
+        showTeaserPopup();
+        return;
+      }
+      state.sport = sport.id;
+      localStorage.setItem("bjj-active-sport", sport.id);
+      state.track = Object.keys(sport.tracks)[0];
+      state.selectedBelt = sport.tracks[state.track].belts[0].id;
+      state.tab = "curriculum";
+      render();
+    };
+    el.appendChild(btn);
+  }
 }
 
 function renderGate() {
@@ -167,8 +212,8 @@ function renderGate() {
   overlay.innerHTML = `
     <div class="gate-card">
       ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="gate-logo" onerror="this.remove()" />` : ""}
-      <h2>Unlock your free BJJ Belt Tracker</h2>
-      <p>Belt-by-belt checklists, video demonstrations, and IBJJF rules — free,
+      <h2>Unlock your free Athlete Progression Tracker</h2>
+      <p>BJJ, Judo, Boxing, and CrossFit — level-by-level checklists, video demonstrations, and competition rules, free,
          sponsored by <strong>${BRAND.name}</strong>. Enter your email to get started.</p>
       <div id="gate-form-host"></div>
     </div>`;
@@ -191,8 +236,8 @@ function showTeaserPopup() {
       <button type="button" class="teaser-close" aria-label="Close">✕</button>
       ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="gate-logo" onerror="this.remove()" />` : ""}
       <h2>You've reached the end of the free preview</h2>
-      <p>Enter your email to unlock the rest — every belt, every video, and all
-         the IBJJF rules. <strong>Free, no cost or obligation.</strong>
+      <p>Enter your email to unlock the rest — every level, every video, every sport, and all
+         the competition rules. <strong>Free, no cost or obligation.</strong>
          Sponsored by <strong>${BRAND.name}</strong>.</p>
       <div id="teaser-form-host"></div>
     </div>`;
@@ -284,7 +329,7 @@ function renderSignup() {
 function renderTrackSwitch() {
   const el = document.getElementById("track-switch");
   el.innerHTML = "";
-  for (const [trackId, track] of Object.entries(TRACKS)) {
+  for (const [trackId, track] of Object.entries(activeTracks())) {
     const btn = document.createElement("button");
     btn.textContent = track.label;
     btn.className = trackId === state.track ? "active" : "";
@@ -294,7 +339,7 @@ function renderTrackSwitch() {
         return;
       }
       state.track = trackId;
-      state.selectedBelt = TRACKS[trackId].belts[0].id;
+      state.selectedBelt = activeTracks()[trackId].belts[0].id;
       render();
     };
     el.appendChild(btn);
@@ -304,7 +349,7 @@ function renderTrackSwitch() {
 function renderRoadmap() {
   const el = document.getElementById("roadmap");
   el.innerHTML = "";
-  const belts = TRACKS[state.track].belts;
+  const belts = activeTracks()[state.track].belts;
   belts.forEach((belt, i) => {
     const { done, total } = beltCompletion(belt);
     const unlocked = isUnlocked(state.track, i);
@@ -333,7 +378,7 @@ function renderRoadmap() {
 
 function renderPanel() {
   const belt = currentBelt();
-  const belts = TRACKS[state.track].belts;
+  const belts = activeTracks()[state.track].belts;
   const index = belts.indexOf(belt);
   const unlocked = isUnlocked(state.track, index);
   const { done, total, complete } = beltCompletion(belt);
@@ -360,7 +405,7 @@ function renderPanel() {
     }
     <div class="panel-tabs">
       <button id="tab-curriculum" class="${state.tab === "curriculum" ? "active" : ""}">Requirements Checklist</button>
-      <button id="tab-rules" class="${state.tab === "rules" ? "active" : ""}">IBJJF Rules</button>
+      <button id="tab-rules" class="${state.tab === "rules" ? "active" : ""}">${activeSport().rulesLabel}</button>
     </div>
     <div class="panel-body" id="panel-body"></div>
   `;
@@ -555,5 +600,6 @@ function renderRules(container, belt) {
 
 /* ---------- init ---------- */
 
-state.selectedBelt = TRACKS[state.track].belts[0].id;
+if (!activeTracks()[state.track]) state.track = Object.keys(activeTracks())[0];
+state.selectedBelt = activeTracks()[state.track].belts[0].id;
 render();
