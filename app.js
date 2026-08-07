@@ -186,7 +186,17 @@ function renderCurriculum(container, belt, unlocked) {
       label.appendChild(span);
 
       const curated = typeof VIDEO_LINKS !== "undefined" ? VIDEO_LINKS[item] : null;
-      if (curated) {
+      const canEmbed = typeof EMBED_VIDEOS === "undefined" || EMBED_VIDEOS;
+      if (curated && !canEmbed) {
+        const link = document.createElement("a");
+        link.className = "video-link";
+        link.href = curated.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "▶ Video";
+        link.title = curated.title;
+        label.appendChild(link);
+      } else if (curated) {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "video-link";
