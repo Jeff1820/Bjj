@@ -29,6 +29,13 @@ This is the fastest way to share it with training partners.
 | A Mac with Xcode installed | Xcode is free from the Mac App Store |
 | Node.js on that Mac | free — nodejs.org |
 
+### Before building: switch the email gate to teaser mode
+
+In `app.js`, change `GATE_MODE` from `"full"` to `"teaser"`. The full-lock
+gate violates Apple guideline 5.1.1 (required marketing signup); teaser mode
+gives reviewers a working free preview with an optional-consent email unlock.
+See MARKETING.md for details.
+
 ### Build steps (run on the Mac, in this repo folder)
 
 ```bash

@@ -20,10 +20,14 @@ const SIGNUP_CONTACT_EMAIL = "jeff.centralcc@gmail.com";
 const SIGNUP_DONE_KEY = "bjj-signup-done";
 const SIGNUP_HIDE_KEY = "bjj-signup-dismissed";
 
-/* Email gate: when true, visitors must submit an email (with marketing consent)
- * to unlock the app. Set to false for App Store builds — Apple rejects apps that
- * require a marketing signup to access core functionality. */
-const REQUIRE_EMAIL_TO_UNLOCK = true;
+/* Email gate modes:
+ *  "full"   — lock screen on first visit; email + marketing consent required (web/PWA).
+ *  "teaser" — first half of the white belt is free; email unlocks everything else,
+ *             marketing consent is a separate OPTIONAL checkbox (use for App Store
+ *             builds — Apple guideline 5.1.1 forbids required marketing signups).
+ *  "off"    — no gate; only the optional signup card.
+ * GATE_MODE_OVERRIDE (if defined before this script) wins — used by tests/builds. */
+const GATE_MODE = typeof GATE_MODE_OVERRIDE !== "undefined" ? GATE_MODE_OVERRIDE : "full";
 const GATE_KEY = "bjj-gate-email";
 
 const state = {
@@ -84,6 +88,62 @@ function isUnlockedByEmail() {
   return !!(localStorage.getItem(GATE_KEY) || localStorage.getItem(SIGNUP_DONE_KEY));
 }
 
+function gateLocked() {
+  return GATE_MODE !== "off" && !isUnlockedByEmail();
+}
+
+async function submitUnlock(email, consent, statusEl, source) {
+  if (SIGNUP_ENDPOINT) {
+    statusEl.textContent = "Unlocking…";
+    try {
+      const res = await fetch(SIGNUP_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, consent, source }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+    } catch {
+      statusEl.textContent = "Couldn't reach the signup service — check your connection and try again.";
+      return false;
+    }
+  }
+  localStorage.setItem(GATE_KEY, email);
+  if (consent) localStorage.setItem(SIGNUP_DONE_KEY, "1");
+  return true;
+}
+
+/* Renders the email form into host. requireConsent: full-gate mode ties consent
+ * to the unlock; teaser mode keeps it a separate optional choice (App Store safe). */
+function buildUnlockForm(host, { requireConsent, source }) {
+  const consentText = requireConsent
+    ? `I agree to receive marketing emails from ${BRAND.name}. Unsubscribe anytime.`
+    : `Also send me training tips and offers from ${BRAND.name} (optional). Unsubscribe anytime.`;
+  host.innerHTML = `
+    <form class="unlock-form">
+      <input type="email" placeholder="you@example.com" required autocomplete="email" />
+      <label class="consent">
+        <input type="checkbox" ${requireConsent ? "required" : ""} />
+        <span>${consentText}</span>
+      </label>
+      <button type="submit" class="signup-btn gate-btn">Unlock everything — free</button>
+    </form>
+    <p class="signup-status" role="status"></p>`;
+  const form = host.querySelector("form");
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const ok = await submitUnlock(
+      form.querySelector('input[type="email"]').value.trim(),
+      form.querySelector('input[type="checkbox"]').checked,
+      host.querySelector(".signup-status"),
+      source
+    );
+    if (ok) {
+      document.getElementById("teaser-overlay")?.remove();
+      render();
+    }
+  };
+}
+
 function render() {
   renderBrand();
   renderTrackSwitch();
@@ -95,7 +155,7 @@ function render() {
 
 function renderGate() {
   const existing = document.getElementById("gate-overlay");
-  if (!REQUIRE_EMAIL_TO_UNLOCK || isUnlockedByEmail()) {
+  if (GATE_MODE !== "full" || isUnlockedByEmail()) {
     if (existing) existing.remove();
     document.body.classList.remove("gated");
     return;
@@ -110,40 +170,43 @@ function renderGate() {
       <h2>Unlock your free BJJ Belt Tracker</h2>
       <p>Belt-by-belt checklists, video demonstrations, and IBJJF rules — free,
          sponsored by <strong>${BRAND.name}</strong>. Enter your email to get started.</p>
-      <form id="gate-form">
-        <input type="email" id="gate-email" placeholder="you@example.com" required autocomplete="email" />
-        <label class="consent">
-          <input type="checkbox" id="gate-consent" required />
-          <span>I agree to receive marketing emails from ${BRAND.name}. Unsubscribe anytime.</span>
-        </label>
-        <button type="submit" class="signup-btn gate-btn">Unlock the app</button>
-      </form>
-      <p id="gate-status" class="signup-status" role="status"></p>
+      <div id="gate-form-host"></div>
     </div>`;
   document.body.appendChild(overlay);
+  buildUnlockForm(document.getElementById("gate-form-host"), {
+    requireConsent: true,
+    source: "bjj-tracker-gate",
+  });
+}
 
-  document.getElementById("gate-form").onsubmit = async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("gate-email").value.trim();
-    const status = document.getElementById("gate-status");
-    if (SIGNUP_ENDPOINT) {
-      status.textContent = "Unlocking…";
-      try {
-        const res = await fetch(SIGNUP_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ email, consent: true, source: "bjj-tracker-gate" }),
-        });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-      } catch {
-        status.textContent = "Couldn't reach the signup service — check your connection and try again.";
-        return;
-      }
-    }
-    localStorage.setItem(GATE_KEY, email);
-    localStorage.setItem(SIGNUP_DONE_KEY, "1");
-    render();
-  };
+/* Teaser-mode popup: shown when the free preview (first half of the white belt)
+ * runs out or the visitor tries to open locked content. Dismissible — the free
+ * half stays usable, which keeps App Store review happy. */
+function showTeaserPopup() {
+  if (document.getElementById("teaser-overlay")) return;
+  const overlay = document.createElement("div");
+  overlay.id = "teaser-overlay";
+  overlay.innerHTML = `
+    <div class="gate-card">
+      <button type="button" class="teaser-close" aria-label="Close">✕</button>
+      ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="gate-logo" onerror="this.remove()" />` : ""}
+      <h2>You've reached the end of the free preview</h2>
+      <p>Enter your email to unlock the rest — every belt, every video, and all
+         the IBJJF rules. <strong>Free, no cost or obligation.</strong>
+         Sponsored by <strong>${BRAND.name}</strong>.</p>
+      <div id="teaser-form-host"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector(".teaser-close").onclick = () => overlay.remove();
+  buildUnlockForm(document.getElementById("teaser-form-host"), {
+    requireConsent: false,
+    source: "bjj-tracker-teaser",
+  });
+}
+
+/* In teaser mode, how many white-belt items are free (first half). */
+function teaserAllowance(belt) {
+  return Math.ceil(beltItems(belt).length / 2);
 }
 
 function renderBrand() {
@@ -226,6 +289,10 @@ function renderTrackSwitch() {
     btn.textContent = track.label;
     btn.className = trackId === state.track ? "active" : "";
     btn.onclick = () => {
+      if (GATE_MODE === "teaser" && gateLocked() && trackId !== state.track) {
+        showTeaserPopup();
+        return;
+      }
       state.track = trackId;
       state.selectedBelt = TRACKS[trackId].belts[0].id;
       render();
@@ -253,6 +320,10 @@ function renderRoadmap() {
       ${unlocked ? "" : '<span class="lock-icon" aria-label="locked">🔒</span>'}
     `;
     chip.onclick = () => {
+      if (GATE_MODE === "teaser" && gateLocked() && i > 0) {
+        showTeaserPopup();
+        return;
+      }
       state.selectedBelt = belt.id;
       render();
     };
@@ -299,11 +370,16 @@ function renderPanel() {
     render();
   };
   document.getElementById("tab-rules").onclick = () => {
+    if (GATE_MODE === "teaser" && gateLocked()) {
+      showTeaserPopup();
+      return;
+    }
     state.tab = "rules";
     render();
   };
 
   const body = document.getElementById("panel-body");
+  if (GATE_MODE === "teaser" && gateLocked()) state.tab = "curriculum";
   if (state.tab === "curriculum") {
     renderCurriculum(body, belt, unlocked);
   } else {
@@ -312,6 +388,9 @@ function renderPanel() {
 }
 
 function renderCurriculum(container, belt, unlocked) {
+  const teaser = GATE_MODE === "teaser" && gateLocked();
+  const allowance = teaser ? teaserAllowance(belt) : Infinity;
+  let itemIndex = 0;
   for (const [category, items] of Object.entries(belt.curriculum)) {
     const section = document.createElement("div");
     section.className = "category";
@@ -322,8 +401,23 @@ function renderCurriculum(container, belt, unlocked) {
     for (const item of items) {
       const key = itemKey(belt.id, category, item);
       const checked = !!state.progress[key];
+      const pastAllowance = itemIndex >= allowance;
+      itemIndex++;
       const label = document.createElement("label");
-      label.className = "check-item" + (checked ? " done" : "") + (unlocked ? "" : " disabled");
+      label.className =
+        "check-item" + (checked ? " done" : "") + (unlocked && !pastAllowance ? "" : " disabled");
+
+      if (pastAllowance) {
+        // Locked preview row: greyed out, any click raises the unlock popup.
+        label.classList.add("teaser-locked");
+        label.innerHTML = `<span class="lock-tag">🔒</span><span>${item.replace(/</g, "&lt;")}</span>`;
+        label.onclick = (e) => {
+          e.preventDefault();
+          showTeaserPopup();
+        };
+        section.appendChild(label);
+        continue;
+      }
 
       const box = document.createElement("input");
       box.type = "checkbox";
@@ -334,6 +428,11 @@ function renderCurriculum(container, belt, unlocked) {
         else delete state.progress[key];
         saveProgress();
         render();
+        // Clicked through the whole free preview → ask for the email.
+        if (teaser && box.checked) {
+          const freeKeys = beltItems(belt).slice(0, allowance);
+          if (freeKeys.every((k) => state.progress[k])) showTeaserPopup();
+        }
       };
 
       const span = document.createElement("span");
@@ -395,6 +494,19 @@ function renderCurriculum(container, belt, unlocked) {
       section.appendChild(label);
     }
     container.appendChild(section);
+  }
+
+  if (teaser) {
+    const hint = document.createElement("div");
+    hint.className = "teaser-hint";
+    const lockedCount = beltItems(belt).length - allowance;
+    hint.innerHTML = `🔒 <strong>${lockedCount} more ${belt.name} items</strong>, every other belt, and all IBJJF rules are one step away.`;
+    const btn = document.createElement("button");
+    btn.className = "signup-btn";
+    btn.textContent = "Unlock everything — free";
+    btn.onclick = showTeaserPopup;
+    hint.appendChild(btn);
+    container.appendChild(hint);
   }
 
   const reset = document.createElement("button");
