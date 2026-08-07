@@ -53,6 +53,24 @@ header.app-header p.tagline {
   font-size: 0.95rem;
 }
 
+.brand-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.brand-bar:empty { display: none; }
+
+.brand-logo { height: 28px; width: auto; }
+
+.brand-bar a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+.brand-bar a:hover { text-decoration: underline; }
+
 .track-switch {
   display: inline-flex;
   gap: 4px;
