@@ -6,6 +6,15 @@ const STORAGE_KEY = "bjj-progress-v1";
  * Set SIGNUP_ENDPOINT to a form service URL (e.g. Formspree: https://formspree.io/f/YOUR_ID)
  * to collect submissions automatically — see MARKETING.md. Until then, submissions
  * fall back to opening a pre-filled email to SIGNUP_CONTACT_EMAIL. */
+/* Brand settings: set url to the full website address (https://...) and drop a
+ * logo image in the repo as purelab-logo.png (it hides itself if missing). */
+const BRAND = {
+  name: "PureLab Performance",
+  url: "",
+  logo: "purelab-logo.png",
+  tagline: "Sports performance & recovery",
+};
+
 const SIGNUP_ENDPOINT = "";
 const SIGNUP_CONTACT_EMAIL = "jeff.centralcc@gmail.com";
 const SIGNUP_DONE_KEY = "bjj-signup-done";
@@ -66,10 +75,24 @@ function currentBelt() {
 /* ---------- rendering ---------- */
 
 function render() {
+  renderBrand();
   renderTrackSwitch();
   renderRoadmap();
   renderPanel();
   renderSignup();
+}
+
+function renderBrand() {
+  const host = document.getElementById("brand-bar");
+  if (!host || host.dataset.rendered) return;
+  host.dataset.rendered = "1";
+  const site = BRAND.url ? BRAND.url.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
+  host.innerHTML = `
+    ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="brand-logo" onerror="this.remove()" />` : ""}
+    <span class="brand-text">
+      Sponsored by <strong>${BRAND.name}</strong>${BRAND.tagline ? ` · ${BRAND.tagline}` : ""}
+      ${site ? ` · <a href="${BRAND.url}" target="_blank" rel="noopener">${site}</a>` : ""}
+    </span>`;
 }
 
 function renderSignup() {
