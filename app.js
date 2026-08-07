@@ -184,6 +184,18 @@ function renderCurriculum(container, belt, unlocked) {
       span.textContent = item;
       label.appendChild(box);
       label.appendChild(span);
+
+      const curated = typeof VIDEO_LINKS !== "undefined" ? VIDEO_LINKS[item] : null;
+      const link = document.createElement("a");
+      link.className = "video-link" + (curated ? "" : " search");
+      link.href = curated
+        ? curated.url
+        : "https://www.youtube.com/results?search_query=" + encodeURIComponent("BJJ " + item);
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = curated ? "▶ Video" : "▶ Search";
+      link.title = curated ? curated.title : "Search YouTube for this technique";
+      label.appendChild(link);
       section.appendChild(label);
     }
     container.appendChild(section);
