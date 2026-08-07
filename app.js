@@ -2,6 +2,15 @@
 
 const STORAGE_KEY = "bjj-progress-v1";
 
+/* Email signup (PureLab Performance list).
+ * Set SIGNUP_ENDPOINT to a form service URL (e.g. Formspree: https://formspree.io/f/YOUR_ID)
+ * to collect submissions automatically — see MARKETING.md. Until then, submissions
+ * fall back to opening a pre-filled email to SIGNUP_CONTACT_EMAIL. */
+const SIGNUP_ENDPOINT = "";
+const SIGNUP_CONTACT_EMAIL = "jeff.centralcc@gmail.com";
+const SIGNUP_DONE_KEY = "bjj-signup-done";
+const SIGNUP_HIDE_KEY = "bjj-signup-dismissed";
+
 const state = {
   track: "adult",
   selectedBelt: null,
@@ -60,6 +69,66 @@ function render() {
   renderTrackSwitch();
   renderRoadmap();
   renderPanel();
+  renderSignup();
+}
+
+function renderSignup() {
+  const host = document.getElementById("signup-card");
+  if (!host) return;
+  if (localStorage.getItem(SIGNUP_DONE_KEY) || localStorage.getItem(SIGNUP_HIDE_KEY)) {
+    host.innerHTML = "";
+    host.style.display = "none";
+    return;
+  }
+  host.style.display = "";
+  host.innerHTML = `
+    <h3>📬 Level up off the mat</h3>
+    <p>Get training tips and offers from <strong>PureLab Performance</strong> in your inbox.</p>
+    <form id="signup-form">
+      <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email" />
+      <label class="consent">
+        <input type="checkbox" id="signup-consent" required />
+        <span>I agree to receive marketing emails from PureLab Performance. Unsubscribe anytime.</span>
+      </label>
+      <div class="signup-actions">
+        <button type="submit" class="signup-btn">Sign me up</button>
+        <button type="button" class="signup-dismiss" id="signup-dismiss">No thanks</button>
+      </div>
+    </form>
+    <p id="signup-status" class="signup-status" role="status"></p>`;
+
+  document.getElementById("signup-dismiss").onclick = () => {
+    localStorage.setItem(SIGNUP_HIDE_KEY, "1");
+    renderSignup();
+  };
+
+  document.getElementById("signup-form").onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("signup-email").value.trim();
+    const status = document.getElementById("signup-status");
+    if (SIGNUP_ENDPOINT) {
+      status.textContent = "Signing you up…";
+      try {
+        const res = await fetch(SIGNUP_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ email, consent: true, source: "bjj-tracker" }),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        localStorage.setItem(SIGNUP_DONE_KEY, "1");
+        renderSignup();
+      } catch {
+        status.textContent = "Couldn't reach the signup service — check your connection and try again.";
+      }
+    } else {
+      // No form service configured yet: hand off to the user's email app instead.
+      location.href =
+        "mailto:" + SIGNUP_CONTACT_EMAIL +
+        "?subject=" + encodeURIComponent("Add me to the PureLab Performance list") +
+        "&body=" + encodeURIComponent("Please add " + email + " to the PureLab Performance mailing list. I agree to receive marketing emails and can unsubscribe anytime.");
+      status.textContent = "We opened your email app — hit send and you're on the list!";
+    }
+  };
 }
 
 function renderTrackSwitch() {
