@@ -223,6 +223,16 @@ main {
   border-bottom-color: var(--accent);
 }
 
+/* Keep the rules tab visible even when it isn't selected */
+#tab-rules:not(.active) {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+#tab-rules:not(.active):hover {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
 .panel-body { padding: 18px 20px; }
 
 /* Curriculum checklist */
