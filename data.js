@@ -28,6 +28,10 @@ const ILLEGAL_ALL = [
   "Striking, biting, eye gouging, hair pulling, small-joint (finger) manipulation",
 ];
 
+/* Multi-sport registry. Each sport file (data-<sport>.js) adds itself here.
+ * BJJ is defined in this file and registered at the bottom. */
+const SPORTS = {};
+
 const TRACKS = {
   adult: {
     label: "Adult (16+)",
@@ -591,4 +595,15 @@ const TRACKS = {
       },
     ],
   },
+};
+
+SPORTS.bjj = {
+  id: "bjj",
+  emoji: "🥋",
+  label: "BJJ",
+  name: "Brazilian Jiu-Jitsu",
+  appTitle: "BJJ Belt Progression Tracker",
+  tagline: "Check off the moves and positions required for each belt — the next level unlocks when the checklist is complete. Includes the IBJJF ruleset for every belt, adults and kids.",
+  rulesLabel: "IBJJF Rules",
+  tracks: TRACKS,
 };
