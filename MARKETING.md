@@ -1,5 +1,19 @@
 # Using BJJ Tracker as a lead generator for PureLab Performance
 
+## Email gate (required signup)
+
+The app opens with a lock screen: visitors must enter an email and tick the
+consent checkbox to unlock it (`REQUIRE_EMAIL_TO_UNLOCK` in `app.js`). The app
+stays blurred behind the gate until they do. Two critical notes:
+
+- **Connect Formspree BEFORE promoting the link.** Until `SIGNUP_ENDPOINT` is
+  set, gated emails are stored only on the visitor's own device — you never
+  receive them.
+- **Turn the gate OFF for App Store builds** (`REQUIRE_EMAIL_TO_UNLOCK = false`).
+  Apple guideline 5.1.1 rejects apps that require a marketing signup to access
+  core functionality. The optional signup card (below) remains and is
+  App-Store-safe.
+
 The app shows an optional email-signup card ("Level up off the mat") under the
 belt panel. It's a clear opt-in: users type their email and tick a consent
 checkbox agreeing to receive PureLab Performance marketing emails. Once they

@@ -20,6 +20,12 @@ const SIGNUP_CONTACT_EMAIL = "jeff.centralcc@gmail.com";
 const SIGNUP_DONE_KEY = "bjj-signup-done";
 const SIGNUP_HIDE_KEY = "bjj-signup-dismissed";
 
+/* Email gate: when true, visitors must submit an email (with marketing consent)
+ * to unlock the app. Set to false for App Store builds — Apple rejects apps that
+ * require a marketing signup to access core functionality. */
+const REQUIRE_EMAIL_TO_UNLOCK = true;
+const GATE_KEY = "bjj-gate-email";
+
 const state = {
   track: "adult",
   selectedBelt: null,
@@ -74,12 +80,70 @@ function currentBelt() {
 
 /* ---------- rendering ---------- */
 
+function isUnlockedByEmail() {
+  return !!(localStorage.getItem(GATE_KEY) || localStorage.getItem(SIGNUP_DONE_KEY));
+}
+
 function render() {
   renderBrand();
   renderTrackSwitch();
   renderRoadmap();
   renderPanel();
   renderSignup();
+  renderGate();
+}
+
+function renderGate() {
+  const existing = document.getElementById("gate-overlay");
+  if (!REQUIRE_EMAIL_TO_UNLOCK || isUnlockedByEmail()) {
+    if (existing) existing.remove();
+    document.body.classList.remove("gated");
+    return;
+  }
+  if (existing) return;
+  document.body.classList.add("gated");
+  const overlay = document.createElement("div");
+  overlay.id = "gate-overlay";
+  overlay.innerHTML = `
+    <div class="gate-card">
+      ${BRAND.logo ? `<img src="${BRAND.logo}" alt="${BRAND.name} logo" class="gate-logo" onerror="this.remove()" />` : ""}
+      <h2>Unlock your free BJJ Belt Tracker</h2>
+      <p>Belt-by-belt checklists, video demonstrations, and IBJJF rules — free,
+         sponsored by <strong>${BRAND.name}</strong>. Enter your email to get started.</p>
+      <form id="gate-form">
+        <input type="email" id="gate-email" placeholder="you@example.com" required autocomplete="email" />
+        <label class="consent">
+          <input type="checkbox" id="gate-consent" required />
+          <span>I agree to receive marketing emails from ${BRAND.name}. Unsubscribe anytime.</span>
+        </label>
+        <button type="submit" class="signup-btn gate-btn">Unlock the app</button>
+      </form>
+      <p id="gate-status" class="signup-status" role="status"></p>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  document.getElementById("gate-form").onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("gate-email").value.trim();
+    const status = document.getElementById("gate-status");
+    if (SIGNUP_ENDPOINT) {
+      status.textContent = "Unlocking…";
+      try {
+        const res = await fetch(SIGNUP_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ email, consent: true, source: "bjj-tracker-gate" }),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+      } catch {
+        status.textContent = "Couldn't reach the signup service — check your connection and try again.";
+        return;
+      }
+    }
+    localStorage.setItem(GATE_KEY, email);
+    localStorage.setItem(SIGNUP_DONE_KEY, "1");
+    render();
+  };
 }
 
 function renderBrand() {
