@@ -12,7 +12,7 @@ const BRAND = {
   name: "PureLab Performance",
   url: "https://purelabperformance.com",
   logo: "purelab-logo.png",
-  tagline: "your sports recovery & performance partner",
+  tagline: "your edge in sports recovery & performance",
 };
 
 const SIGNUP_ENDPOINT = "";
