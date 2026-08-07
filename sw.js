@@ -1,6 +1,6 @@
 /* Service worker: cache-first app shell so the tracker works offline.
  * Bump CACHE version when shipping updates to force a refresh. */
-const CACHE = "bjj-tracker-v2";
+const CACHE = "bjj-tracker-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -12,6 +12,7 @@ const ASSETS = [
   "./icon-192.png",
   "./icon-512.png",
   "./purelab-logo.png",
+  "./bg-rolling.jpg",
 ];
 
 self.addEventListener("install", (e) => {
