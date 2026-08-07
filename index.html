@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BJJ Belt Progression Tracker</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <meta name="theme-color" content="#1b3a6b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BJJ Tracker" />
 </head>
 <body>
   <header class="app-header">
@@ -16,14 +22,20 @@
   <main>
     <div class="roadmap" id="roadmap"></div>
     <div class="belt-panel" id="belt-panel"></div>
+    <div class="signup-card" id="signup-card"></div>
   </main>
 
   <footer>
-    <p><strong>Disclaimer:</strong> The curriculum checklists are a suggested syllabus — the IBJJF does not mandate techniques per belt, and your academy's requirements may differ. Promotion is always your professor's decision. Rules summaries are based on the IBJJF rulebook; always verify against the current official rulebook at <a href="https://ibjjf.com/books-videos">ibjjf.com</a> before competing. Progress is saved locally in this browser only.</p>
+    <p><strong>Disclaimer:</strong> The curriculum checklists are a suggested syllabus — the IBJJF does not mandate techniques per belt, and your academy's requirements may differ. Promotion is always your professor's decision. Rules summaries are based on the IBJJF rulebook; always verify against the current official rulebook at <a href="https://ibjjf.com/books-videos">ibjjf.com</a> before competing. Progress is saved locally in this browser only. The email signup is optional — addresses are used solely for PureLab Performance marketing emails, and every email includes an unsubscribe link.</p>
   </footer>
 
   <script src="data.js"></script>
   <script src="videos.js"></script>
   <script src="app.js"></script>
+  <script id="sw-register">
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
 </body>
 </html>

@@ -346,6 +346,72 @@ table.points td {
 
 table.points td:last-child { text-align: center; font-weight: 700; }
 
+/* Email signup card */
+.signup-card {
+  margin-top: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+}
+
+.signup-card h3 { margin: 0 0 4px; font-size: 1.05rem; }
+
+.signup-card p { margin: 0 0 12px; font-size: 0.92rem; color: var(--muted); }
+
+.signup-card input[type="email"] {
+  width: 100%;
+  max-width: 340px;
+  padding: 9px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.signup-card .consent {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.83rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.signup-card .consent input { margin-top: 2px; accent-color: var(--accent); }
+
+.signup-actions { display: flex; gap: 10px; }
+
+.signup-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.signup-btn:hover { filter: brightness(1.1); }
+
+.signup-dismiss {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.signup-status { min-height: 1.2em; font-size: 0.85rem; }
+
 footer {
   max-width: 900px;
   margin: 0 auto;

@@ -1,0 +1,8 @@
+{
+  "appId": "com.jeff1820.bjjtracker",
+  "appName": "BJJ Tracker",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "automatic"
+  }
+}
