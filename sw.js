@@ -1,11 +1,14 @@
 /* Service worker: cache-first app shell so the tracker works offline.
  * Bump CACHE version when shipping updates to force a refresh. */
-const CACHE = "bjj-tracker-v3";
+const CACHE = "bjj-tracker-v4";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./data.js",
+  "./data-judo.js",
+  "./data-boxing.js",
+  "./data-crossfit.js",
   "./videos.js",
   "./app.js",
   "./manifest.webmanifest",
