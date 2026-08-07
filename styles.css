@@ -65,7 +65,12 @@ header.app-header p.tagline {
 
 .brand-bar:empty { display: none; }
 
-.brand-logo { height: 48px; width: auto; }
+.brand-logo { height: 84px; width: auto; }
+
+@media (max-width: 600px) {
+  .brand-bar { flex-direction: column; gap: 6px; }
+  .brand-logo { height: 72px; }
+}
 
 .brand-bar a { color: var(--accent); font-weight: 600; text-decoration: none; }
 
