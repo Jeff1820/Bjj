@@ -186,16 +186,46 @@ function renderCurriculum(container, belt, unlocked) {
       label.appendChild(span);
 
       const curated = typeof VIDEO_LINKS !== "undefined" ? VIDEO_LINKS[item] : null;
-      const link = document.createElement("a");
-      link.className = "video-link" + (curated ? "" : " search");
-      link.href = curated
-        ? curated.url
-        : "https://www.youtube.com/results?search_query=" + encodeURIComponent("BJJ " + item);
-      link.target = "_blank";
-      link.rel = "noopener";
-      link.textContent = curated ? "▶ Video" : "▶ Search";
-      link.title = curated ? curated.title : "Search YouTube for this technique";
-      label.appendChild(link);
+      if (curated) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "video-link";
+        btn.textContent = "▶ Video";
+        btn.title = curated.title;
+        btn.onclick = (e) => {
+          e.preventDefault();
+          const open = label.nextElementSibling?.classList?.contains("video-embed");
+          if (open) {
+            label.nextElementSibling.remove();
+            btn.textContent = "▶ Video";
+            return;
+          }
+          const id = new URL(curated.url).searchParams.get("v");
+          const embed = document.createElement("div");
+          embed.className = "video-embed";
+          embed.innerHTML = `
+            <div class="video-frame">
+              <iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${curated.title.replace(/"/g, "&quot;")}"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-caption">${curated.title.replace(/</g, "&lt;")} —
+              <a href="${curated.url}" target="_blank" rel="noopener">watch on YouTube ↗</a>
+            </div>`;
+          label.after(embed);
+          btn.textContent = "✕ Close";
+        };
+        label.appendChild(btn);
+      } else {
+        const link = document.createElement("a");
+        link.className = "video-link search";
+        link.href = "https://www.youtube.com/results?search_query=" + encodeURIComponent("BJJ " + item);
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "▶ Search";
+        link.title = "Search YouTube for this technique";
+        label.appendChild(link);
+      }
       section.appendChild(label);
     }
     container.appendChild(section);
