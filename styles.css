@@ -435,6 +435,57 @@ table.points td:last-child { text-align: center; font-weight: 700; }
 
 .signup-status { min-height: 1.2em; font-size: 0.85rem; }
 
+/* Email gate */
+body.gated { overflow: hidden; }
+
+body.gated main, body.gated footer, body.gated header.app-header { filter: blur(6px); pointer-events: none; user-select: none; }
+
+#gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+
+.gate-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-top: 6px solid var(--accent);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  max-width: 430px;
+  width: 100%;
+  padding: 28px 26px;
+  text-align: center;
+}
+
+.gate-logo { height: 90px; width: auto; margin-bottom: 10px; }
+
+.gate-card h2 { margin: 0 0 8px; font-size: 1.3rem; text-wrap: balance; }
+
+.gate-card p { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; }
+
+.gate-card input[type="email"] {
+  width: 100%;
+  padding: 11px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.gate-card .consent { text-align: left; display: flex; gap: 8px; align-items: flex-start; font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; cursor: pointer; }
+
+.gate-card .consent input { margin-top: 2px; accent-color: var(--accent); }
+
+.gate-btn { width: 100%; padding: 12px; font-size: 1rem; }
+
 footer {
   max-width: 900px;
   margin: 0 auto;
