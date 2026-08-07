@@ -10,7 +10,7 @@ const STORAGE_KEY = "bjj-progress-v1";
  * logo image in the repo as purelab-logo.png (it hides itself if missing). */
 const BRAND = {
   name: "PureLab Performance",
-  url: "",
+  url: "https://purelabperformance.com",
   logo: "purelab-logo.png",
   tagline: "Sports performance & recovery",
 };
