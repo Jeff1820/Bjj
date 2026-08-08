@@ -1,6 +1,7 @@
 /* CrossFit progression data. Auto-drafted, review before relying on standards. */
 SPORTS.crossfit = {
   "id": "crossfit",
+  "openLadder": true,
   "emoji": "🏋️",
   "label": "CrossFit",
   "name": "CrossFit",

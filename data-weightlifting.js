@@ -1,6 +1,7 @@
 /* Weightlifting progression data. Auto-drafted; standards are male bodyweight multiples (see rules text). */
 SPORTS.weightlifting = {
   "id": "weightlifting",
+  "openLadder": true,
   "emoji": "💪",
   "label": "Weightlifting",
   "name": "Weightlifting",

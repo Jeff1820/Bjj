@@ -1,6 +1,7 @@
 /* Boxing progression data. Auto-drafted, review against the current USA Boxing rulebook. */
 SPORTS.boxing = {
   "id": "boxing",
+  "openLadder": true,
   "emoji": "🥊",
   "label": "Boxing",
   "name": "Boxing",

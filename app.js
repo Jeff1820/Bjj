@@ -192,8 +192,11 @@ function beltCompletion(belt) {
   return { done, total: items.length, complete: done === items.length && items.length > 0 };
 }
 
-/* A belt is unlocked when every previous belt in its track is complete. */
+/* A belt is unlocked when every previous belt in its track is complete.
+ * Sports with no formal rank prerequisite (openLadder) are fully open —
+ * every level can be worked on in any order. */
 function isUnlocked(trackId, index) {
+  if (activeSport().openLadder) return true;
   if (index === 0) return true;
   const belts = activeTracks()[trackId].belts;
   for (let i = 0; i < index; i++) {
@@ -639,7 +642,9 @@ function renderPanel() {
       !unlocked
         ? `<div class="locked-banner">🔒 Locked — complete every requirement on the previous belt first. You can preview the curriculum and rules below.</div>`
         : complete && next
-          ? `<div class="complete-banner">✔ All requirements complete — ${next.name} is unlocked! Promotion itself is always your professor's call.</div>`
+          ? activeSport().openLadder
+            ? `<div class="complete-banner">✔ All ${belt.name} items complete — on to ${next.name}!</div>`
+            : `<div class="complete-banner">✔ All requirements complete — ${next.name} is unlocked! Promotion itself is always your professor's call.</div>`
           : ""
     }
     <div class="panel-tabs">
