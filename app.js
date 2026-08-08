@@ -95,6 +95,84 @@ function saveProgress() {
   localStorage.setItem(STORAGE_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(state.progress));
 }
 
+/* Lift logging (weightlifting sport): weight x reps history per item, per profile. */
+const LIFTS_KEY = "bjj-lifts";
+
+function loadLifts() {
+  try {
+    return JSON.parse(localStorage.getItem(LIFTS_KEY + "::" + ACTIVE_PROFILE.id)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveLifts(lifts) {
+  localStorage.setItem(LIFTS_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(lifts));
+}
+
+function unitPref() {
+  return localStorage.getItem("bjj-unit") || "lb";
+}
+
+function liftSummaryText(entries) {
+  if (!entries || !entries.length) return "";
+  const last = entries[entries.length - 1];
+  const pr = entries.reduce((a, b) => (b.w > a.w || (b.w === a.w && b.r > a.r) ? b : a));
+  let s = `${last.w}${last.u}×${last.r}`;
+  if (pr !== last) s += ` · PR ${pr.w}${pr.u}×${pr.r}`;
+  return s;
+}
+
+function buildLiftPanel(panel, key, summaryEl) {
+  const rebuild = () => {
+    const entries = (loadLifts()[key] || []).slice();
+    const unit = unitPref();
+    panel.innerHTML = `
+      <form class="lift-form">
+        <input type="number" step="0.5" min="0" max="2000" placeholder="Weight" class="lift-w" required />
+        <button type="button" class="lift-unit">${unit}</button>
+        <span class="lift-x">×</span>
+        <input type="number" step="1" min="1" max="500" placeholder="Reps" class="lift-r" required />
+        <button type="submit" class="signup-btn lift-add">Log</button>
+      </form>
+      <div class="lift-history">
+        ${entries.slice(-8).reverse().map((e, i) => {
+          const idx = entries.length - 1 - i;
+          const d = new Date(e.t);
+          return `<div class="lift-entry"><span>${e.w}${e.u} × ${e.r}</span>
+            <span class="lift-date">${d.toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+            <button type="button" class="lift-del" data-i="${idx}" aria-label="Delete entry">✕</button></div>`;
+        }).join("") || '<div class="lift-empty">No sets logged yet.</div>'}
+      </div>`;
+
+    panel.querySelector(".lift-unit").onclick = () => {
+      localStorage.setItem("bjj-unit", unitPref() === "lb" ? "kg" : "lb");
+      rebuild();
+    };
+    panel.querySelector(".lift-form").onsubmit = (e) => {
+      e.preventDefault();
+      const w = parseFloat(panel.querySelector(".lift-w").value);
+      const r = parseInt(panel.querySelector(".lift-r").value, 10);
+      if (!(w >= 0) || !(r >= 1)) return;
+      const lifts = loadLifts();
+      (lifts[key] ||= []).push({ w, r, u: unitPref(), t: Date.now() });
+      saveLifts(lifts);
+      summaryEl.textContent = liftSummaryText(lifts[key]);
+      rebuild();
+    };
+    panel.querySelectorAll(".lift-del").forEach((btn) => {
+      btn.onclick = () => {
+        const lifts = loadLifts();
+        (lifts[key] || []).splice(parseInt(btn.dataset.i, 10), 1);
+        saveLifts(lifts);
+        summaryEl.textContent = liftSummaryText(lifts[key]);
+        rebuild();
+      };
+    });
+  };
+  rebuild();
+}
+
 function itemKey(beltId, category, item) {
   return `${beltId}::${category}::${item}`;
 }
@@ -598,6 +676,31 @@ function renderCurriculum(container, belt, unlocked) {
       span.textContent = item;
       label.appendChild(box);
       label.appendChild(span);
+
+      if (activeSport().id === "weightlifting") {
+        const summary = document.createElement("span");
+        summary.className = "lift-summary";
+        summary.textContent = liftSummaryText(loadLifts()[key]);
+        label.appendChild(summary);
+
+        const logBtn = document.createElement("button");
+        logBtn.type = "button";
+        logBtn.className = "video-link lift-log-btn";
+        logBtn.textContent = "🏋 Log";
+        logBtn.onclick = (e) => {
+          e.preventDefault();
+          const open = label.nextElementSibling?.classList?.contains("lift-log-panel");
+          if (open) {
+            label.nextElementSibling.remove();
+            return;
+          }
+          const panel = document.createElement("div");
+          panel.className = "lift-log-panel";
+          label.after(panel);
+          buildLiftPanel(panel, key, summary);
+        };
+        label.appendChild(logBtn);
+      }
 
       const curated = typeof VIDEO_LINKS !== "undefined" ? VIDEO_LINKS[item] : null;
       const canEmbed = typeof EMBED_VIDEOS === "undefined" || EMBED_VIDEOS;
