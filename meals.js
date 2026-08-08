@@ -68,78 +68,189 @@ const CUISINES = {
   american: {
     label: "American",
     dishes: [
-      { n: "Grilled {P} plate", c: "potato", x: [["veg", 150]] },
-      { n: "{P} rice bowl", c: "rice", x: [["veg", 150]] },
+      { n: "Grilled {P} plate", c: "potato", x: [["veg", 150]], r: [
+        "Season the {P} with salt, pepper, and garlic powder.",
+        "Toss the potatoes in a little oil, salt, and paprika; roast at 425°F (220°C) for 25–30 min until crisp.",
+        "Grill or pan-sear the {P} over medium-high heat until cooked through (165°F for poultry).",
+        "Steam or sauté the vegetables until just tender.",
+        "Plate everything and finish with a squeeze of lemon.",
+      ] },
+      { n: "{P} rice bowl", c: "rice", x: [["veg", 150]], r: [
+        "Cook the rice.",
+        "Cut the {P} bite-size, season with salt and pepper, and sear in a hot pan until cooked through.",
+        "Sauté the vegetables in the same pan for 2–3 min.",
+        "Build the bowl: rice, then {P}, then vegetables; season to taste.",
+      ] },
     ],
   },
   mexican: {
     label: "Mexican",
     dishes: [
-      { n: "{P} burrito bowl", c: "rice", x: [["beans", 100], ["salsa", 50]] },
-      { n: "{P} tacos", c: "tortilla", x: [["salsa", 50], ["avocado", 40]] },
+      { n: "{P} burrito bowl", c: "rice", x: [["beans", 100], ["salsa", 50]], r: [
+        "Cook the rice; stir in a squeeze of lime and a pinch of salt.",
+        "Season the {P} with cumin, chili powder, and salt; cook in a hot pan until done.",
+        "Warm the black beans.",
+        "Assemble: rice, beans, {P}, and salsa over the top.",
+      ] },
+      { n: "{P} tacos", c: "tortilla", x: [["salsa", 50], ["avocado", 40]], r: [
+        "Season the {P} with cumin, chili powder, garlic, and salt; cook until done, then chop or shred.",
+        "Warm the tortillas in a dry skillet, ~30 seconds per side.",
+        "Fill the tortillas with the {P}.",
+        "Top with salsa and sliced avocado; finish with lime.",
+      ] },
     ],
   },
   italian: {
     label: "Italian",
     dishes: [
-      { n: "{P} pasta marinara", c: "pasta", x: [["marinara", 120]] },
-      { n: "{P} with risotto-style rice", c: "rice", x: [["parmesan", 15], ["veg", 100]] },
+      { n: "{P} pasta marinara", c: "pasta", x: [["marinara", 120]], r: [
+        "Boil the pasta in salted water until al dente; drain.",
+        "Season the {P} with salt, pepper, and Italian herbs; cook, then slice or crumble.",
+        "Warm the marinara in the same pan, scraping up the browned bits.",
+        "Toss pasta, sauce, and {P} together; finish with basil and black pepper.",
+      ] },
+      { n: "{P} with risotto-style rice", c: "rice", x: [["parmesan", 15], ["veg", 100]], r: [
+        "Cook the rice a little wetter than usual so it stays creamy.",
+        "Stir the parmesan into the hot rice.",
+        "Season and cook the {P} in a separate pan.",
+        "Sauté the vegetables; serve the {P} over the cheesy rice with the veg.",
+      ] },
     ],
   },
   chinese: {
     label: "Chinese",
     dishes: [
-      { n: "{P} stir-fry with rice", c: "rice", x: [["veg", 150]] },
-      { n: "{P} noodle bowl", c: "noodles", x: [["veg", 120]] },
+      { n: "{P} stir-fry with rice", c: "rice", x: [["veg", 150]], r: [
+        "Cook the rice.",
+        "Cut the {P} bite-size; stir-fry in a very hot pan or wok with a little oil until nearly done.",
+        "Add the vegetables with soy sauce, garlic, and ginger; stir-fry 2–3 min more.",
+        "Serve over the rice.",
+      ] },
+      { n: "{P} noodle bowl", c: "noodles", x: [["veg", 120]], r: [
+        "Cook the noodles per the package; drain.",
+        "Stir-fry the {P} in a hot pan with a little oil.",
+        "Add the vegetables, a splash of soy sauce, and a drizzle of sesame oil.",
+        "Toss the noodles in and stir until everything is coated and hot.",
+      ] },
     ],
   },
   mediterranean: {
     label: "Mediterranean",
     dishes: [
-      { n: "{P} couscous bowl", c: "couscous", x: [["hummus", 50], ["veg", 120]] },
-      { n: "{P} with potatoes & veg", c: "potato", x: [["veg", 150]] },
+      { n: "{P} couscous bowl", c: "couscous", x: [["hummus", 50], ["veg", 120]], r: [
+        "Pour boiling water over the couscous, cover 5 min, and fluff with a fork.",
+        "Season the {P} with oregano, lemon, and garlic; grill or pan-sear until done.",
+        "Sauté or roast the vegetables.",
+        "Assemble the bowl with the hummus; drizzle olive oil and lemon over the top.",
+      ] },
+      { n: "{P} with potatoes & veg", c: "potato", x: [["veg", 150]], r: [
+        "Toss the potatoes with olive oil, oregano, and salt; roast at 425°F (220°C) for 25–30 min.",
+        "Season the {P} with lemon, garlic, and oregano; cook until done through.",
+        "Roast or sauté the vegetables alongside.",
+        "Serve with a lemon wedge.",
+      ] },
     ],
   },
   japanese: {
     label: "Japanese",
     dishes: [
-      { n: "{P} teriyaki bowl", c: "rice", x: [["teriyaki", 40], ["veg", 100]] },
-      { n: "{P} donburi rice bowl", c: "rice", x: [["veg", 120]] },
+      { n: "{P} teriyaki bowl", c: "rice", x: [["teriyaki", 40], ["veg", 100]], r: [
+        "Cook the rice.",
+        "Sear the {P} in a hot pan; add the teriyaki sauce for the last 1–2 min to glaze.",
+        "Steam the vegetables until just tender.",
+        "Serve the glazed {P} over rice; sesame seeds optional.",
+      ] },
+      { n: "{P} donburi rice bowl", c: "rice", x: [["veg", 120]], r: [
+        "Cook the rice.",
+        "Simmer the {P} in a pan with a splash of soy sauce, a pinch of sugar, and grated ginger.",
+        "Add the vegetables for the last few minutes of simmering.",
+        "Spoon everything, sauce included, over the rice.",
+      ] },
     ],
   },
   thai: {
     label: "Thai",
     dishes: [
-      { n: "Thai {P} coconut curry with jasmine rice", c: "rice", x: [["curry", 100], ["veg", 100]] },
-      { n: "Pad-thai-style {P} noodles", c: "noodles", x: [["veg", 100], ["peanuts", 15]] },
+      { n: "Thai {P} coconut curry with jasmine rice", c: "rice", x: [["curry", 100], ["veg", 100]], r: [
+        "Cook the jasmine rice.",
+        "Sear the {P} pieces in a hot pan.",
+        "Add the coconut curry sauce and vegetables; simmer 5–8 min.",
+        "Serve over rice; top with basil or cilantro and a squeeze of lime.",
+      ] },
+      { n: "Pad-thai-style {P} noodles", c: "noodles", x: [["veg", 100], ["peanuts", 15]], r: [
+        "Cook or soak the noodles; drain.",
+        "Stir-fry the {P} in a hot pan.",
+        "Add the noodles and vegetables with a splash of fish sauce (or soy), lime juice, and a touch of sugar; toss.",
+        "Top with the crushed peanuts.",
+      ] },
     ],
   },
   indian: {
     label: "Indian",
     dishes: [
-      { n: "{P} curry with basmati rice", c: "rice", x: [["curry", 100], ["veg", 100]] },
-      { n: "Tandoori-style {P} with naan", c: "naan", x: [["yogsauce", 50], ["veg", 100]] },
+      { n: "{P} curry with basmati rice", c: "rice", x: [["curry", 100], ["veg", 100]], r: [
+        "Cook the basmati rice.",
+        "Sear the {P} with curry powder or garam masala.",
+        "Add the curry sauce and vegetables; simmer until tender.",
+        "Serve over rice; cilantro on top.",
+      ] },
+      { n: "Tandoori-style {P} with naan", c: "naan", x: [["yogsauce", 50], ["veg", 100]], r: [
+        "Marinate the {P} in half the yogurt sauce with paprika, cumin, and garlic for 15+ min.",
+        "Roast, grill, or broil until charred at the edges and cooked through.",
+        "Warm the naan.",
+        "Serve with the vegetables and the remaining yogurt sauce.",
+      ] },
     ],
   },
   korean: {
     label: "Korean",
     dishes: [
-      { n: "{P} bulgogi rice bowl", c: "rice", x: [["kimchi", 60], ["veg", 100]] },
-      { n: "Bibimbap-style {P} bowl", c: "rice", x: [["gochujang", 20], ["veg", 150]] },
+      { n: "{P} bulgogi rice bowl", c: "rice", x: [["kimchi", 60], ["veg", 100]], r: [
+        "Slice the {P} thin and marinate 15+ min in soy sauce, a little sugar, garlic, and sesame oil.",
+        "Cook the rice.",
+        "Sear the {P} hot and fast until caramelized.",
+        "Build the bowl with rice, {P}, and vegetables; kimchi on the side.",
+      ] },
+      { n: "Bibimbap-style {P} bowl", c: "rice", x: [["gochujang", 20], ["veg", 150]], r: [
+        "Cook the rice.",
+        "Sauté the vegetables with a little sesame oil and salt.",
+        "Cook the {P}; slice or crumble it.",
+        "Arrange everything over the rice, add the gochujang, and mix it all together before eating.",
+      ] },
     ],
   },
   middleeastern: {
     label: "Middle Eastern",
     dishes: [
-      { n: "{P} shawarma plate with pita", c: "pita", x: [["hummus", 50], ["veg", 100]] },
-      { n: "{P} kebab rice plate", c: "rice", x: [["yogsauce", 50], ["veg", 120]] },
+      { n: "{P} shawarma plate with pita", c: "pita", x: [["hummus", 50], ["veg", 100]], r: [
+        "Season the {P} with cumin, coriander, paprika, and garlic; cook until browned and done.",
+        "Warm the pita.",
+        "Spread the hummus on the plate or pita.",
+        "Add the {P} and vegetables; finish with lemon.",
+      ] },
+      { n: "{P} kebab rice plate", c: "rice", x: [["yogsauce", 50], ["veg", 120]], r: [
+        "Cube and season the {P}; thread onto skewers.",
+        "Grill or broil, turning, until charred outside and cooked through.",
+        "Cook the rice.",
+        "Serve the skewers on the rice with the yogurt sauce and vegetables.",
+      ] },
     ],
   },
   bbq: {
     label: "BBQ/Southern",
     dishes: [
-      { n: "BBQ {P} plate with cornbread", c: "cornbread", x: [["bbq", 40], ["veg", 120]] },
-      { n: "Smoked {P} with potatoes", c: "potato", x: [["bbq", 40], ["veg", 120]] },
+      { n: "BBQ {P} plate with cornbread", c: "cornbread", x: [["bbq", 40], ["veg", 120]], r: [
+        "Season the {P} with a dry rub — paprika, brown sugar, salt, and pepper.",
+        "Grill or roast; brush with the BBQ sauce in the last few minutes so it doesn't burn.",
+        "Warm the cornbread.",
+        "Serve with the vegetables and extra sauce for dipping.",
+      ] },
+      { n: "Smoked {P} with potatoes", c: "potato", x: [["bbq", 40], ["veg", 120]], r: [
+        "Rub the {P} with smoked paprika, salt, and pepper.",
+        "Cook low and slow — 300°F (150°C) oven or indirect grill heat — and glaze with BBQ sauce at the end.",
+        "Roast the potatoes at 425°F (220°C) until crisp.",
+        "Serve together with the vegetables.",
+      ] },
     ],
   },
 };
@@ -230,6 +341,12 @@ function buildDish(dish, proteinKey, mealKcal, mealProtein, unit) {
   const cGrams = Math.max(0, Math.round(((mealKcal - used) / kcalOf(cFood, 100)) * 100 / 10) * 10);
   parts.splice(1, 0, `${fmtQty(cGrams, unit)} ${cFood.name}`);
   return `${dish.n.replace("{P}", pFood.name)}: ${parts.join(" + ")}`;
+}
+
+/* Recipe steps for a dish with the chosen protein filled in. */
+function buildRecipe(dish, proteinKey) {
+  if (!dish.r) return null;
+  return dish.r.map((step) => step.split("{P}").join(FOODS[proteinKey].name));
 }
 
 function mealDayState(mealCount) {
@@ -476,13 +593,19 @@ function renderMealPlan(s) {
   const el = document.getElementById("meals-plan");
   const saved = savedMeals();
   const optionData = [];
-  /* One dish option line with a save/unsave star. o = {t,c,m,k,p} */
-  const optLi = (cuisineLabel, text, mealName, kcal, protein) => {
-    const idx = optionData.push({ t: text, c: cuisineLabel, m: mealName, k: kcal, p: protein }) - 1;
+  /* One dish option line with a save/unsave star and a recipe toggle.
+   * o = {t,c,m,k,p,r} — r is the recipe steps array (or null). */
+  const recipeBlock = (steps) => steps && steps.length
+    ? `<button type="button" class="recipe-toggle">Recipe ▾</button>
+       <ol class="dish-recipe" hidden>${steps.map((st) => `<li>${st}</li>`).join("")}</ol>`
+    : "";
+  const optLi = (cuisineLabel, text, mealName, kcal, protein, recipe) => {
+    const idx = optionData.push({ t: text, c: cuisineLabel, m: mealName, k: kcal, p: protein, r: recipe || null }) - 1;
     const isSaved = saved.some((x) => x.t === text);
     return `<li><em>${cuisineLabel}:</em> ${text}
       <button type="button" class="dish-save ${isSaved ? "on" : ""}" data-o="${idx}"
-        title="${isSaved ? "Remove from saved meals" : "Save this meal"}">${isSaved ? "★" : "☆"}</button></li>`;
+        title="${isSaved ? "Remove from saved meals" : "Save this meal"}">${isSaved ? "★" : "☆"}</button>
+      ${recipeBlock(recipe)}</li>`;
   };
   el.innerHTML = `
     ${goalLine(s, t)}
@@ -502,11 +625,15 @@ function renderMealPlan(s) {
         const options = [0, 1].map((k) => {
           const [cKey, pKey] = pickCombo(i * 2 + k + shift);
           const dish = CUISINES[cKey].dishes[(i + k + shift) % CUISINES[cKey].dishes.length];
-          return optLi(CUISINES[cKey].label, buildDish(dish, pKey, mealKcal, mealProtein, s.unit), mealName, mealKcal, mealProtein);
+          return optLi(CUISINES[cKey].label, buildDish(dish, pKey, mealKcal, mealProtein, s.unit), mealName, mealKcal, mealProtein, buildRecipe(dish, pKey));
         });
         if (i === 0 && s.meals >= 3) {
           const pG = Math.round(((mealProtein * 0.6) / FOODS.yogurt.p) * 100 / 10) * 10;
-          options.push(optLi("Breakfast classic", `${fmtQty(pG, s.unit)} Greek yogurt + ${fmtQty(80, s.unit)} dry oats + ${fmtQty(100, s.unit)} berries`, mealName, mealKcal, mealProtein));
+          options.push(optLi("Breakfast classic", `${fmtQty(pG, s.unit)} Greek yogurt + ${fmtQty(80, s.unit)} dry oats + ${fmtQty(100, s.unit)} berries`, mealName, mealKcal, mealProtein, [
+            "Spoon the Greek yogurt into a bowl.",
+            "Stir in the oats — eat right away for crunch, or refrigerate overnight for a soft overnight-oats texture.",
+            "Top with the berries; cinnamon or a drizzle of honey to taste (honey adds ~20 kcal per teaspoon).",
+          ]));
         }
         return `
           <div class="meal-card ${day.checks[i] ? "done" : ""}">
@@ -526,7 +653,8 @@ function renderMealPlan(s) {
         ${saved.map((x, j) => `
         <li><em>${x.c}:</em> ${x.t}
           <span class="saved-meta">${x.m} · ~${x.k} kcal · ${x.p}g protein</span>
-          <button type="button" class="saved-remove" data-j="${j}" title="Remove from saved meals">✕</button></li>`).join("")}
+          <button type="button" class="saved-remove" data-j="${j}" title="Remove from saved meals">✕</button>
+          ${recipeBlock(x.r)}</li>`).join("")}
       </ul>
       <p class="saved-note">Saved to this athlete's profile. Portions were sized for the meal slot shown — rescale if you eat one at a different time.</p>
     </div>` : ""}
@@ -534,6 +662,14 @@ function renderMealPlan(s) {
        calorie and protein share, shown in ${s.unit === "lb" ? "ounces (switch to kg/cm for grams)" : "grams (switch to lb/in for ounces)"}.
        Swap equivalent proteins/carbs freely; add sauces and cooking oil mindfully
        (each tablespoon of oil is ~120 kcal).</p>`;
+
+  el.querySelectorAll(".recipe-toggle").forEach((btn) => {
+    btn.onclick = () => {
+      const steps = btn.nextElementSibling;
+      steps.hidden = !steps.hidden;
+      btn.textContent = steps.hidden ? "Recipe ▾" : "Recipe ▴";
+    };
+  });
 
   el.querySelectorAll(".dish-save").forEach((btn) => {
     btn.onclick = () => {
