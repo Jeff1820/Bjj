@@ -829,6 +829,27 @@ footer {
 
 .dish-save:hover { color: var(--accent); }
 
+.recipe-toggle {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.recipe-toggle:hover { text-decoration: underline; }
+
+.dish-recipe {
+  margin: 6px 0 4px;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.dish-recipe li { margin-bottom: 3px; }
+
 .meals-saved {
   margin-top: 14px;
   border: 1px solid var(--border);
