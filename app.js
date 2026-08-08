@@ -659,6 +659,7 @@ function renderPanel() {
     <div class="panel-tabs">
       <button id="tab-curriculum" class="${state.tab === "curriculum" ? "active" : ""}">Requirements Checklist</button>
       <button id="tab-rules" class="${state.tab === "rules" ? "active" : ""}">${activeSport().rulesLabel}</button>
+      ${activeSport().id === "weightlifting" ? `<button id="tab-workouts" class="${state.tab === "workouts" ? "active" : ""}">My Workouts</button>` : ""}
     </div>
     <div class="panel-body" id="panel-body"></div>
   `;
@@ -675,10 +676,23 @@ function renderPanel() {
     state.tab = "rules";
     render();
   };
+  const workoutsTab = document.getElementById("tab-workouts");
+  if (workoutsTab) {
+    workoutsTab.onclick = () => {
+      if (GATE_MODE === "teaser" && gateLocked()) {
+        showTeaserPopup();
+        return;
+      }
+      state.tab = "workouts";
+      render();
+    };
+  }
 
   const body = document.getElementById("panel-body");
   if (GATE_MODE === "teaser" && gateLocked()) state.tab = "curriculum";
-  if (state.tab === "curriculum") {
+  if (state.tab === "workouts" && activeSport().id === "weightlifting") {
+    renderWorkouts(body);
+  } else if (state.tab === "curriculum" || state.tab === "workouts") {
     renderCurriculum(body, belt, unlocked);
   } else {
     renderRules(body, belt);

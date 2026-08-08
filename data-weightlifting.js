@@ -38,6 +38,12 @@ SPORTS.weightlifting = {
               "Overhead squat with PVC pipe",
               "Box jump with soft landing mechanics"
             ],
+            "Arms & Isolation": [
+              "Dumbbell biceps curl — 3×10 with strict form, no swinging",
+              "Triceps rope pushdown — 3×12 with elbows pinned to your sides",
+              "Standing calf raise — 3×15 with a full stretch at the bottom",
+              "Dumbbell lateral raise — 3×12, light and controlled"
+            ],
             "Accessories & Conditioning": [
               "Plank 60 seconds",
               "20-minute brisk walk, easy row, or bike"
@@ -96,10 +102,17 @@ SPORTS.weightlifting = {
               "Power clean technique with light load",
               "Kettlebell swing 3x15"
             ],
+            "Arms & Isolation": [
+              "Barbell biceps curl — 3×8 without leaning back",
+              "Lying triceps extension (skull crusher) — 3×10",
+              "Seated calf raise — 3×15 with a 2-second pause at the top",
+              "Face pull (rope) — 3×15 pulling to eye level"
+            ],
             "Accessories & Conditioning": [
               "Barbell row 3x8",
               "Chin-up 3 strict reps",
-              "Face pulls for shoulder health"
+              "Face pulls for shoulder health",
+              "Battle ropes — 5 rounds of 30 seconds hard work"
             ],
             "Mobility & Recovery": [
               "Thoracic spine foam rolling before pressing",
@@ -154,10 +167,18 @@ SPORTS.weightlifting = {
               "Power clean 1x bodyweight",
               "Push press 3x5"
             ],
+            "Arms & Isolation": [
+              "Hammer curl — 3×10 each arm",
+              "Close-grip bench press — 3×8",
+              "Single-leg calf raise — 3×12 each side",
+              "Rear delt fly — 3×15"
+            ],
             "Accessories & Conditioning": [
               "Weighted pull-up 3x5",
               "Dips 3x10",
-              "Farmer's carry, heavy for 40 meters"
+              "Farmer's carry, heavy for 40 meters",
+              "Hand-over-hand rope pull (sled or partner) — 3 pulls of 15+ meters",
+              "Hanging leg raise — 3×10 without swinging"
             ],
             "Mobility & Recovery": [
               "Jefferson curl with light load",
@@ -215,9 +236,17 @@ SPORTS.weightlifting = {
               "Power snatch with moderate load",
               "Clean and jerk technique refinement"
             ],
+            "Arms & Isolation": [
+              "Weighted chin-up (biceps emphasis) — 3×6",
+              "Weighted dip — 3×8",
+              "Preacher curl — 3×10 through a full range of motion",
+              "Overhead triceps extension — 3×12",
+              "Leg-press calf raise — 4×12"
+            ],
             "Accessories & Conditioning": [
               "Weighted pull-up with 0.5x bodyweight added",
-              "Belt squat or leg press volume work for joint-friendly hypertrophy"
+              "Belt squat or leg press volume work for joint-friendly hypertrophy",
+              "Heavy sled rope pull — 5 pulls, adding weight each pull"
             ],
             "Mobility & Recovery": [
               "Banded shoulder dislocates and pass-throughs",
@@ -275,9 +304,16 @@ SPORTS.weightlifting = {
               "Power clean 1.5x bodyweight",
               "Snatch at bodyweight for athletic power maintenance"
             ],
+            "Arms & Isolation": [
+              "Weighted chin-up — 3×5 at +25% bodyweight",
+              "Strict ring or bar dip — 3×8 weighted",
+              "Barbell curl — half your bodyweight on the bar for 5 clean reps",
+              "Standing calf raise — 1.5× bodyweight for 8 reps"
+            ],
             "Accessories & Conditioning": [
               "Individualized weak-point accessory block",
-              "GPP circuits and sled work between meet preps"
+              "GPP circuits and sled work between meet preps",
+              "Ab wheel rollout — 3×12 from the feet, or 3×20 from the knees"
             ],
             "Mobility & Recovery": [
               "Daily mobility minimums maintained through the peak",
@@ -336,6 +372,11 @@ SPORTS.weightlifting = {
             "Olympic Lifts & Power": [
               "Medicine ball throw and low box jump for power maintenance"
             ],
+            "Arms & Isolation": [
+              "Dumbbell biceps curl — 2×12 controlled",
+              "Triceps rope pushdown — 2×15",
+              "Standing calf raise — 2×15"
+            ],
             "Accessories & Conditioning": [
               "Face pulls for shoulder health"
             ],
@@ -387,6 +428,12 @@ SPORTS.weightlifting = {
             "Olympic Lifts & Power": [
               "Kettlebell swing 3x15",
               "Hang power clean with light load"
+            ],
+            "Arms & Isolation": [
+              "Barbell or EZ-bar curl — 3×10",
+              "Close-grip bench press or push-up — 3×10",
+              "Seated calf raise — 3×12",
+              "Face pull (rope) — 3×15 for shoulder health"
             ],
             "Accessories & Conditioning": [
               "Chin-up 5 strict reps"
@@ -440,8 +487,14 @@ SPORTS.weightlifting = {
             "Olympic Lifts & Power": [
               "Power clean 0.75-1x bodyweight"
             ],
+            "Arms & Isolation": [
+              "Hammer curl — 3×10",
+              "Weighted or bench dip — 3×8",
+              "Single-leg calf raise — 2×12 each side"
+            ],
             "Accessories & Conditioning": [
-              "Weighted carries and sled drags for low-impact conditioning"
+              "Weighted carries and sled drags for low-impact conditioning",
+              "Hand-over-hand rope pull — 3 steady pulls of 15 meters"
             ],
             "Mobility & Recovery": [
               "Structured deload every 3-4 weeks",
