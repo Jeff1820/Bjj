@@ -797,7 +797,22 @@ footer {
 
 .meal-card.done { background: color-mix(in srgb, var(--success) 8%, var(--panel)); border-color: var(--success); }
 
+.meal-head { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+
 .meal-check { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+
+.meal-shuffle {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.meal-shuffle:hover { color: var(--text); border-color: var(--accent); }
 
 .meal-check input { width: 18px; height: 18px; accent-color: var(--success); }
 
