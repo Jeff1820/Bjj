@@ -6,6 +6,7 @@
 const MEALS_KEY = "bjj-meal";
 const MEALS_DAY_KEY = "bjj-mealday";
 const MEALS_ADULT_KEY = "bjj-meals-adult";
+const MEALS_SAVED_KEY = "bjj-mealsaved";
 const CAL_FLOOR = 1400; // safety floor — never plan below this
 
 /* Per-100g macros (protein, fat, carbs). */
@@ -250,6 +251,18 @@ function saveMealDay(day) {
   localStorage.setItem(MEALS_DAY_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(day));
 }
 
+function savedMeals() {
+  try {
+    return JSON.parse(localStorage.getItem(MEALS_SAVED_KEY + "::" + ACTIVE_PROFILE.id)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveSavedMeals(list) {
+  localStorage.setItem(MEALS_SAVED_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(list));
+}
+
 function mealLabel(i, count) {
   if (count === 3) return ["Breakfast", "Lunch", "Dinner"][i];
   if (count === 4) return ["Breakfast", "Lunch", "Dinner", "Snack"][i];
@@ -461,6 +474,16 @@ function renderMealPlan(s) {
   const pickCombo = (idx) => [s.cuisines[idx % s.cuisines.length], s.proteins[idx % s.proteins.length]];
 
   const el = document.getElementById("meals-plan");
+  const saved = savedMeals();
+  const optionData = [];
+  /* One dish option line with a save/unsave star. o = {t,c,m,k,p} */
+  const optLi = (cuisineLabel, text, mealName, kcal, protein) => {
+    const idx = optionData.push({ t: text, c: cuisineLabel, m: mealName, k: kcal, p: protein }) - 1;
+    const isSaved = saved.some((x) => x.t === text);
+    return `<li><em>${cuisineLabel}:</em> ${text}
+      <button type="button" class="dish-save ${isSaved ? "on" : ""}" data-o="${idx}"
+        title="${isSaved ? "Remove from saved meals" : "Save this meal"}">${isSaved ? "★" : "☆"}</button></li>`;
+  };
   el.innerHTML = `
     ${goalLine(s, t)}
     ${t.floored ? '<p class="meals-floor">Your target came out very low, so the plan uses a 1,400 kcal safety floor. Consider professional guidance before dieting harder than this.</p>' : ""}
@@ -475,30 +498,63 @@ function renderMealPlan(s) {
         const mealKcal = Math.round(t.calories * splits[i]);
         const mealProtein = Math.round(t.protein * splits[i]);
         const shift = day.shuffles[i] || 0;
+        const mealName = mealLabel(i, s.meals);
         const options = [0, 1].map((k) => {
           const [cKey, pKey] = pickCombo(i * 2 + k + shift);
           const dish = CUISINES[cKey].dishes[(i + k + shift) % CUISINES[cKey].dishes.length];
-          return `<li><em>${CUISINES[cKey].label}:</em> ${buildDish(dish, pKey, mealKcal, mealProtein, s.unit)}</li>`;
+          return optLi(CUISINES[cKey].label, buildDish(dish, pKey, mealKcal, mealProtein, s.unit), mealName, mealKcal, mealProtein);
         });
         if (i === 0 && s.meals >= 3) {
           const pG = Math.round(((mealProtein * 0.6) / FOODS.yogurt.p) * 100 / 10) * 10;
-          options.push(`<li><em>Breakfast classic:</em> ${fmtQty(pG, s.unit)} Greek yogurt + ${fmtQty(80, s.unit)} dry oats + ${fmtQty(100, s.unit)} berries</li>`);
+          options.push(optLi("Breakfast classic", `${fmtQty(pG, s.unit)} Greek yogurt + ${fmtQty(80, s.unit)} dry oats + ${fmtQty(100, s.unit)} berries`, mealName, mealKcal, mealProtein));
         }
         return `
           <div class="meal-card ${day.checks[i] ? "done" : ""}">
             <div class="meal-head">
               <label class="meal-check"><input type="checkbox" data-i="${i}" ${day.checks[i] ? "checked" : ""}/>
-                <strong>${mealLabel(i, s.meals)}</strong> · ${Math.round(splits[i] * 100)}% · ~${mealKcal} kcal · ${mealProtein}g protein</label>
+                <strong>${mealName}</strong> · ${Math.round(splits[i] * 100)}% · ~${mealKcal} kcal · ${mealProtein}g protein</label>
               <button type="button" class="meal-shuffle" data-shuffle="${i}" title="New ideas for this meal">🔄 New ideas</button>
             </div>
             <ul>${options.join("")}</ul>
           </div>`;
       }).join("")}
     </div>
+    ${saved.length ? `
+    <div class="meals-saved">
+      <h3>⭐ Saved meals</h3>
+      <ul>
+        ${saved.map((x, j) => `
+        <li><em>${x.c}:</em> ${x.t}
+          <span class="saved-meta">${x.m} · ~${x.k} kcal · ${x.p}g protein</span>
+          <button type="button" class="saved-remove" data-j="${j}" title="Remove from saved meals">✕</button></li>`).join("")}
+      </ul>
+      <p class="saved-note">Saved to this athlete's profile. Portions were sized for the meal slot shown — rescale if you eat one at a different time.</p>
+    </div>` : ""}
     <p class="meals-note">Pick either option per meal — portions are cooked weights scaled to that meal's
        calorie and protein share, shown in ${s.unit === "lb" ? "ounces (switch to kg/cm for grams)" : "grams (switch to lb/in for ounces)"}.
        Swap equivalent proteins/carbs freely; add sauces and cooking oil mindfully
        (each tablespoon of oil is ~120 kcal).</p>`;
+
+  el.querySelectorAll(".dish-save").forEach((btn) => {
+    btn.onclick = () => {
+      const o = optionData[parseInt(btn.dataset.o, 10)];
+      const list = savedMeals();
+      const at = list.findIndex((x) => x.t === o.t);
+      if (at >= 0) list.splice(at, 1);
+      else list.push(o);
+      saveSavedMeals(list);
+      renderMealPlan(s);
+    };
+  });
+
+  el.querySelectorAll(".saved-remove").forEach((btn) => {
+    btn.onclick = () => {
+      const list = savedMeals();
+      list.splice(parseInt(btn.dataset.j, 10), 1);
+      saveSavedMeals(list);
+      renderMealPlan(s);
+    };
+  });
 
   el.querySelectorAll(".meal-shuffle").forEach((btn) => {
     btn.onclick = () => {

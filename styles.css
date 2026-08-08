@@ -814,6 +814,48 @@ footer {
 
 .meal-shuffle:hover { color: var(--text); border-color: var(--accent); }
 
+.dish-save {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  vertical-align: baseline;
+}
+
+.dish-save.on { color: var(--gold, #d4a017); }
+
+.dish-save:hover { color: var(--accent); }
+
+.meals-saved {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--accent) 4%, var(--panel));
+}
+
+.meals-saved h3 { margin: 0 0 8px; font-size: 1rem; }
+
+.meals-saved ul { margin: 0; padding-left: 20px; font-size: 0.92rem; }
+
+.meals-saved li { margin-bottom: 6px; }
+
+.saved-meta { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+
+.saved-remove {
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 4px;
+}
+
+.saved-remove:hover { color: var(--danger, #c0392b); }
+
 .meal-check input { width: 18px; height: 18px; accent-color: var(--success); }
 
 .meal-card ul { margin: 8px 0 0; padding-left: 24px; font-size: 0.92rem; }
