@@ -941,6 +941,71 @@ footer {
 
 .workout-add { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
+.workout-ex-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+
+.ss-btn {
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 2px 6px;
+}
+
+.ss-btn.on, .ss-btn:hover { color: var(--accent); }
+
+.superset-group {
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.superset-tag {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.today-banner {
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.today-banner.rest { border-color: var(--border); background: var(--bg); color: var(--muted); }
+
+.schedule-rows { display: grid; gap: 6px; }
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: 8px;
+}
+
+.schedule-row.today { background: color-mix(in srgb, var(--accent) 8%, var(--panel)); font-weight: 600; }
+
+.schedule-row span { font-size: 0.92rem; }
+
+.schedule-row select {
+  flex: 0 1 190px;
+  min-width: 0;
+  padding: 6px 8px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
 .workout-pick {
   flex: 1 1 170px;
   min-width: 0;
