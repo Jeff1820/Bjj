@@ -96,7 +96,7 @@ function saveProgress() {
   localStorage.setItem(STORAGE_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(state.progress));
 }
 
-/* Lift logging (weightlifting sport): weight x reps history per item, per profile. */
+/* Lift logging (weightlifting & CrossFit): weight x reps x sets history per item, per profile. */
 const LIFTS_KEY = "bjj-lifts";
 
 function loadLifts() {
@@ -115,12 +115,18 @@ function unitPref() {
   return localStorage.getItem("bjj-unit") || "lb";
 }
 
+/* "185lb×10×4" — sets suffix only when more than one set was logged;
+ * weight 0 reads as bodyweight (common for CrossFit movements). */
+function liftEntryText(e) {
+  return `${e.w > 0 ? e.w + e.u : "BW"}×${e.r}${e.s > 1 ? `×${e.s}` : ""}`;
+}
+
 function liftSummaryText(entries) {
   if (!entries || !entries.length) return "";
   const last = entries[entries.length - 1];
   const pr = entries.reduce((a, b) => (b.w > a.w || (b.w === a.w && b.r > a.r) ? b : a));
-  let s = `${last.w}${last.u}×${last.r}`;
-  if (pr !== last) s += ` · PR ${pr.w}${pr.u}×${pr.r}`;
+  let s = liftEntryText(last);
+  if (pr !== last) s += ` · PR ${liftEntryText(pr)}`;
   return s;
 }
 
@@ -134,13 +140,15 @@ function buildLiftPanel(panel, key, summaryEl) {
         <button type="button" class="lift-unit">${unit}</button>
         <span class="lift-x">×</span>
         <input type="number" step="1" min="1" max="500" placeholder="Reps" class="lift-r" required />
+        <span class="lift-x">×</span>
+        <input type="number" step="1" min="1" max="50" placeholder="Sets" class="lift-s" />
         <button type="submit" class="signup-btn lift-add">Log</button>
       </form>
       <div class="lift-history">
         ${entries.slice(-8).reverse().map((e, i) => {
           const idx = entries.length - 1 - i;
           const d = new Date(e.t);
-          return `<div class="lift-entry"><span>${e.w}${e.u} × ${e.r}</span>
+          return `<div class="lift-entry"><span>${e.w > 0 ? e.w + e.u : "BW"} × ${e.r}${e.s > 1 ? ` × ${e.s} sets` : ""}</span>
             <span class="lift-date">${d.toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
             <button type="button" class="lift-del" data-i="${idx}" aria-label="Delete entry">✕</button></div>`;
         }).join("") || '<div class="lift-empty">No sets logged yet.</div>'}
@@ -154,9 +162,10 @@ function buildLiftPanel(panel, key, summaryEl) {
       e.preventDefault();
       const w = parseFloat(panel.querySelector(".lift-w").value);
       const r = parseInt(panel.querySelector(".lift-r").value, 10);
+      const sets = parseInt(panel.querySelector(".lift-s").value, 10) || 1;
       if (!(w >= 0) || !(r >= 1)) return;
       const lifts = loadLifts();
-      (lifts[key] ||= []).push({ w, r, u: unitPref(), t: Date.now() });
+      (lifts[key] ||= []).push({ w, r, s: sets, u: unitPref(), t: Date.now() });
       saveLifts(lifts);
       summaryEl.textContent = liftSummaryText(lifts[key]);
       rebuild();
@@ -729,7 +738,7 @@ function renderCurriculum(container, belt, unlocked) {
       label.appendChild(box);
       label.appendChild(span);
 
-      if (activeSport().id === "weightlifting") {
+      if (activeSport().id === "weightlifting" || activeSport().id === "crossfit") {
         const summary = document.createElement("span");
         summary.className = "lift-summary";
         summary.textContent = liftSummaryText(loadLifts()[key]);
