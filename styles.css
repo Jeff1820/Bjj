@@ -92,6 +92,60 @@ header.app-header p.tagline {
 
 .brand-bar a:hover { text-decoration: underline; }
 
+/* Athlete profile switcher */
+.profile-switch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.profile-label { font-size: 0.85rem; color: var(--muted); margin-right: 4px; }
+
+.profile-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.profile-chip.active {
+  border-color: var(--success);
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+}
+
+.profile-chip.profile-add { border-style: dashed; }
+
+.profile-del { color: var(--muted); font-size: 0.75rem; padding: 0 2px; }
+
+.profile-del:hover { color: var(--danger); }
+
+.profile-add-form { display: inline-flex; gap: 6px; align-items: center; }
+
+.profile-add-form input {
+  width: 120px;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.profile-add-form .signup-btn { padding: 5px 12px; font-size: 0.85rem; }
+
 .sport-switch {
   display: flex;
   flex-wrap: wrap;
