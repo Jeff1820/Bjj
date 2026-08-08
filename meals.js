@@ -161,13 +161,20 @@ function saveMealSettings(s) {
 
 function computeTargets(s) {
   const kg = s.unit === "lb" ? s.weight / 2.2046 : s.weight;
+  const cm = s.unit === "lb" ? s.height * 2.54 : s.height;
+  const bmr = 10 * kg + 6.25 * cm - 5 * s.age + (s.sex === "m" ? 5 : -161);
+  const tdee = Math.round(bmr * s.activity);
+  let adjust = 0;
+  if (s.goal === "target" && s.targetWeight > 0) {
+    adjust = s.targetWeight < s.weight ? -500 : s.targetWeight > s.weight ? 300 : 0;
+  } else if (s.goal !== "target") {
+    adjust = s.goal;
+  }
   let calories;
   if (s.calMode === "custom" && s.customCal > 0) {
     calories = Math.round(s.customCal);
   } else {
-    const cm = s.unit === "lb" ? s.height * 2.54 : s.height;
-    const bmr = 10 * kg + 6.25 * cm - 5 * s.age + (s.sex === "m" ? 5 : -161);
-    calories = Math.round(bmr * s.activity + s.goal);
+    calories = tdee + adjust;
   }
   let floored = false;
   if (calories < CAL_FLOOR) {
@@ -177,7 +184,28 @@ function computeTargets(s) {
   const protein = Math.round(kg * 2);
   const fat = Math.round((calories * 0.25) / 9);
   const carbs = Math.max(0, Math.round((calories - protein * 4 - fat * 9) / 4));
-  return { calories, protein, fat, carbs, floored };
+  return { calories, protein, fat, carbs, floored, tdee };
+}
+
+/* Honest timeline toward a target weight, based on the actual daily gap. */
+function goalLine(s, t) {
+  if (!(s.targetWeight > 0)) return "";
+  const unit = s.unit;
+  const diff = s.targetWeight - s.weight; // + gain, - lose
+  if (Math.abs(diff) < 0.5) return `<p class="meals-goal">🎯 You're at your target weight — this plan holds you there.</p>`;
+  const gap = t.calories - t.tdee; // + surplus, - deficit
+  if ((diff < 0 && gap >= 0) || (diff > 0 && gap <= 0)) {
+    return `<p class="meals-goal">🎯 Target ${s.targetWeight}${unit}: your current calories won't move you toward it — pick "Work toward target weight" or adjust your custom calories.</p>`;
+  }
+  const diffKg = Math.abs(unit === "lb" ? diff / 2.2046 : diff);
+  const days = Math.round((diffKg * 7700) / Math.abs(gap));
+  const weeks = Math.max(1, Math.round(days / 7));
+  const when = new Date(Date.now() + days * 86400000)
+    .toLocaleDateString(undefined, { month: "long", day: "numeric", year: days > 300 ? "numeric" : undefined });
+  const perWeek = unit === "lb" ? Math.round(Math.abs(gap) * 7 / 3500 * 10) / 10 : Math.round(Math.abs(gap) * 7 / 7700 * 100) / 100;
+  return `<p class="meals-goal">🎯 ${diff < 0 ? "Losing" : "Gaining"} toward <strong>${s.targetWeight}${unit}</strong>:
+    about <strong>${weeks} weeks</strong> (around ${when}) at ~${perWeek}${unit}/week.
+    A sustainable pace is roughly 0.5–1${unit === "lb" ? " lb" : "% bodyweight"} per week — progress won't be perfectly linear, and that's normal.</p>`;
 }
 
 /* Scale one dish to a meal's calorie/protein share. */
@@ -274,8 +302,11 @@ function renderMeals() {
             <option value="1.55" selected>Train 3-5x/week</option>
             <option value="1.725">Train 6-7x/week</option>
           </select></label>
+        <label>Target weight (<span id="unit-tw">${imperial ? "lb" : "kg"}</span>, optional)
+          <input name="targetWeight" type="number" min="1" step="any" /></label>
         <label>Goal
           <select name="goal">
+            <option value="target">Work toward target weight</option>
             <option value="-500">Lean out (moderate)</option>
             <option value="0" selected>Maintain</option>
             <option value="300">Build (lean gain)</option>
@@ -329,6 +360,7 @@ function renderMeals() {
     form.height.value = s.height;
     form.activity.value = String(s.activity);
     form.goal.value = String(s.goal);
+    if (s.targetWeight > 0) form.targetWeight.value = s.targetWeight;
   }
   syncCalMode();
 
@@ -338,6 +370,9 @@ function renderMeals() {
     const h = parseFloat(form.height.value);
     if (w > 0) form.weight.value = toMetric ? Math.round(w / 2.2046 * 10) / 10 : Math.round(w * 2.2046 * 10) / 10;
     if (h > 0) form.height.value = toMetric ? Math.round(h * 2.54 * 10) / 10 : Math.round(h / 2.54 * 10) / 10;
+    const tw = parseFloat(form.targetWeight.value);
+    if (tw > 0) form.targetWeight.value = toMetric ? Math.round(tw / 2.2046 * 10) / 10 : Math.round(tw * 2.2046 * 10) / 10;
+    document.getElementById("unit-tw").textContent = toMetric ? "kg" : "lb";
     form.dataset.unit = toMetric ? "kg" : "lb";
     document.getElementById("unit-w").textContent = toMetric ? "kg" : "lb";
     document.getElementById("unit-h").textContent = toMetric ? "cm" : "in";
@@ -347,6 +382,7 @@ function renderMeals() {
       saved.weight = toMetric ? Math.round(saved.weight / 2.2046 * 10) / 10 : Math.round(saved.weight * 2.2046 * 10) / 10;
       saved.height = toMetric ? Math.round(saved.height * 2.54 * 10) / 10 : Math.round(saved.height / 2.54 * 10) / 10;
       saved.unit = toMetric ? "kg" : "lb";
+      if (saved.targetWeight > 0) saved.targetWeight = toMetric ? Math.round(saved.targetWeight / 2.2046 * 10) / 10 : Math.round(saved.targetWeight * 2.2046 * 10) / 10;
       saveMealSettings(saved);
     }
   };
@@ -367,7 +403,8 @@ function renderMeals() {
       weight: parseFloat(form.weight.value),
       height: parseFloat(form.height.value),
       activity: parseFloat(form.activity.value),
-      goal: parseInt(form.goal.value, 10),
+      goal: form.goal.value === "target" ? "target" : parseInt(form.goal.value, 10),
+      targetWeight: parseFloat(form.targetWeight.value) || 0,
       meals: parseInt(form.meals.value, 10),
       splits: splits.map((v) => Math.round(v * 100)),
       proteins: chosenProteins.length ? chosenProteins : Object.keys(PROTEIN_CHOICES),
@@ -392,6 +429,7 @@ function renderMealPlan(s) {
 
   const el = document.getElementById("meals-plan");
   el.innerHTML = `
+    ${goalLine(s, t)}
     ${t.floored ? '<p class="meals-floor">Your target came out very low, so the plan uses a 1,400 kcal safety floor. Consider professional guidance before dieting harder than this.</p>' : ""}
     <div class="meals-stats">
       <div><strong>${t.calories.toLocaleString()}</strong><span>kcal/day${s.calMode === "custom" ? " (your target)" : ""}</span></div>
