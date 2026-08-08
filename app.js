@@ -281,7 +281,24 @@ function render() {
   renderGate();
 }
 
+/* Per-sport ghost backgrounds (public-domain photos, Wikimedia Commons). */
+const GHOST_IMAGES = {
+  bjj: "bg-rolling.jpg",
+  judo: "bg-judo.jpg",
+  boxing: "bg-boxing.jpg",
+  crossfit: "bg-crossfit.jpg",
+  weightlifting: "bg-weightlifting.jpg",
+  meals: "bg-meals.jpg",
+};
+
+function updateGhost() {
+  const key = state.view === "meals" ? "meals" : state.sport;
+  const img = GHOST_IMAGES[key] || GHOST_IMAGES.bjj;
+  document.documentElement.style.setProperty("--ghost-img", `url("${img}")`);
+}
+
 function renderHeader() {
+  updateGhost();
   const h1 = document.getElementById("app-title");
   const tag = document.getElementById("app-tagline");
   if (state.view === "meals") {
