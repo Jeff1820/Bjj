@@ -12,8 +12,15 @@ const CAL_FLOOR = 1400; // safety floor — never plan below this
 const FOODS = {
   chicken: { name: "chicken breast", p: 31, f: 3.6, c: 0 },
   steak: { name: "sirloin steak", p: 27, f: 8, c: 0 },
+  groundbeef: { name: "lean ground beef", p: 26, f: 10, c: 0 },
+  pork: { name: "pork loin", p: 27, f: 6, c: 0 },
+  turkey: { name: "turkey breast", p: 29, f: 1, c: 0 },
   fish: { name: "salmon", p: 20, f: 13, c: 0 },
+  whitefish: { name: "cod or tilapia", p: 18, f: 0.7, c: 0 },
+  tuna: { name: "tuna", p: 26, f: 1, c: 0 },
   shrimp: { name: "shrimp", p: 24, f: 0.3, c: 0.2 },
+  eggs: { name: "eggs", p: 13, f: 11, c: 1 },
+  tofu: { name: "firm tofu", p: 14, f: 8, c: 2 },
   yogurt: { name: "nonfat Greek yogurt", p: 10, f: 0.4, c: 4 },
   rice: { name: "cooked rice", p: 2.7, f: 0.3, c: 28 },
   potato: { name: "roasted potatoes", p: 2, f: 0.1, c: 17 },
@@ -30,9 +37,31 @@ const FOODS = {
   parmesan: { name: "parmesan", p: 35, f: 28, c: 4 },
   hummus: { name: "hummus", p: 8, f: 10, c: 14 },
   berries: { name: "berries", p: 0.7, f: 0.3, c: 14 },
+  teriyaki: { name: "teriyaki sauce", p: 2, f: 0, c: 16 },
+  curry: { name: "coconut curry sauce", p: 1, f: 17, c: 6 },
+  yogsauce: { name: "yogurt sauce", p: 6, f: 3, c: 5 },
+  kimchi: { name: "kimchi", p: 2, f: 0.5, c: 4 },
+  gochujang: { name: "gochujang sauce", p: 2, f: 1, c: 25 },
+  peanuts: { name: "crushed peanuts", p: 26, f: 49, c: 16 },
+  naan: { name: "naan bread", p: 9, f: 10, c: 50 },
+  pita: { name: "pita bread", p: 9, f: 1.2, c: 55 },
+  bbq: { name: "BBQ sauce", p: 0.8, f: 0.6, c: 40 },
+  cornbread: { name: "cornbread", p: 7, f: 10, c: 43 },
 };
 
-const PROTEIN_CHOICES = { chicken: "Chicken", steak: "Steak/Beef", fish: "Fish", shrimp: "Shrimp" };
+const PROTEIN_CHOICES = {
+  chicken: "Chicken",
+  steak: "Steak",
+  groundbeef: "Ground beef",
+  pork: "Pork",
+  turkey: "Turkey",
+  fish: "Salmon",
+  whitefish: "White fish",
+  tuna: "Tuna",
+  shrimp: "Shrimp",
+  eggs: "Eggs",
+  tofu: "Tofu",
+};
 
 const CUISINES = {
   american: {
@@ -68,6 +97,48 @@ const CUISINES = {
     dishes: [
       { n: "{P} couscous bowl", c: "couscous", x: [["hummus", 50], ["veg", 120]] },
       { n: "{P} with potatoes & veg", c: "potato", x: [["veg", 150]] },
+    ],
+  },
+  japanese: {
+    label: "Japanese",
+    dishes: [
+      { n: "{P} teriyaki bowl", c: "rice", x: [["teriyaki", 40], ["veg", 100]] },
+      { n: "{P} donburi rice bowl", c: "rice", x: [["veg", 120]] },
+    ],
+  },
+  thai: {
+    label: "Thai",
+    dishes: [
+      { n: "Thai {P} coconut curry with jasmine rice", c: "rice", x: [["curry", 100], ["veg", 100]] },
+      { n: "Pad-thai-style {P} noodles", c: "noodles", x: [["veg", 100], ["peanuts", 15]] },
+    ],
+  },
+  indian: {
+    label: "Indian",
+    dishes: [
+      { n: "{P} curry with basmati rice", c: "rice", x: [["curry", 100], ["veg", 100]] },
+      { n: "Tandoori-style {P} with naan", c: "naan", x: [["yogsauce", 50], ["veg", 100]] },
+    ],
+  },
+  korean: {
+    label: "Korean",
+    dishes: [
+      { n: "{P} bulgogi rice bowl", c: "rice", x: [["kimchi", 60], ["veg", 100]] },
+      { n: "Bibimbap-style {P} bowl", c: "rice", x: [["gochujang", 20], ["veg", 150]] },
+    ],
+  },
+  middleeastern: {
+    label: "Middle Eastern",
+    dishes: [
+      { n: "{P} shawarma plate with pita", c: "pita", x: [["hummus", 50], ["veg", 100]] },
+      { n: "{P} kebab rice plate", c: "rice", x: [["yogsauce", 50], ["veg", 120]] },
+    ],
+  },
+  bbq: {
+    label: "BBQ/Southern",
+    dishes: [
+      { n: "BBQ {P} plate with cornbread", c: "cornbread", x: [["bbq", 40], ["veg", 120]] },
+      { n: "Smoked {P} with potatoes", c: "potato", x: [["bbq", 40], ["veg", 120]] },
     ],
   },
 };
