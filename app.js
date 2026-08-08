@@ -30,6 +30,43 @@ const SIGNUP_HIDE_KEY = "bjj-signup-dismissed";
 const GATE_MODE = typeof GATE_MODE_OVERRIDE !== "undefined" ? GATE_MODE_OVERRIDE : "full";
 const GATE_KEY = "bjj-gate-email";
 
+/* Athlete profiles: several people (e.g. a parent and their kids) can share one
+ * device, each with independent progress. Profiles live in localStorage. */
+const PROFILES_KEY = "bjj-profiles";
+const ACTIVE_PROFILE_KEY = "bjj-active-profile";
+
+function loadProfiles() {
+  try {
+    const p = JSON.parse(localStorage.getItem(PROFILES_KEY));
+    if (Array.isArray(p) && p.length) return p;
+  } catch {}
+  return null;
+}
+
+function saveProfiles(profiles) {
+  localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+}
+
+function initProfiles() {
+  let profiles = loadProfiles();
+  if (!profiles) {
+    profiles = [{ id: "p1", name: "Athlete 1" }];
+    saveProfiles(profiles);
+    // Migrate pre-profile progress into the first profile so nobody loses checkmarks.
+    const old = localStorage.getItem(STORAGE_KEY);
+    if (old) {
+      localStorage.setItem(STORAGE_KEY + "::p1", old);
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }
+  let active = localStorage.getItem(ACTIVE_PROFILE_KEY);
+  if (!profiles.some((p) => p.id === active)) active = profiles[0].id;
+  localStorage.setItem(ACTIVE_PROFILE_KEY, active);
+  return active;
+}
+
+const ACTIVE_PROFILE = { id: initProfiles() };
+
 const state = {
   sport: localStorage.getItem("bjj-active-sport") || "bjj",
   track: "adult",
@@ -48,14 +85,14 @@ function activeTracks() {
 
 function loadProgress() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    return JSON.parse(localStorage.getItem(STORAGE_KEY + "::" + ACTIVE_PROFILE.id)) || {};
   } catch {
     return {};
   }
 }
 
 function saveProgress() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+  localStorage.setItem(STORAGE_KEY + "::" + ACTIVE_PROFILE.id, JSON.stringify(state.progress));
 }
 
 function itemKey(beltId, category, item) {
@@ -156,6 +193,7 @@ function buildUnlockForm(host, { requireConsent, source }) {
 function render() {
   renderHeader();
   renderBrand();
+  renderProfileSwitch();
   renderSportSwitch();
   renderTrackSwitch();
   renderRoadmap();
@@ -171,6 +209,82 @@ function renderHeader() {
   if (h1) h1.textContent = `${sport.emoji} ${sport.appTitle}`;
   if (tag) tag.textContent = sport.tagline;
   document.title = sport.appTitle;
+}
+
+function renderProfileSwitch() {
+  const el = document.getElementById("profile-switch");
+  if (!el) return;
+  const profiles = loadProfiles() || [];
+  el.innerHTML = '<span class="profile-label">Who\'s training?</span>';
+
+  for (const p of profiles) {
+    const chip = document.createElement("button");
+    chip.className = "profile-chip" + (p.id === ACTIVE_PROFILE.id ? " active" : "");
+    chip.textContent = "👤 " + p.name;
+    chip.onclick = () => {
+      if (p.id === ACTIVE_PROFILE.id) return;
+      ACTIVE_PROFILE.id = p.id;
+      localStorage.setItem(ACTIVE_PROFILE_KEY, p.id);
+      state.progress = loadProgress();
+      render();
+    };
+    if (profiles.length > 1) {
+      const del = document.createElement("span");
+      del.className = "profile-del";
+      del.textContent = "✕";
+      del.title = "Remove " + p.name;
+      del.onclick = (e) => {
+        e.stopPropagation();
+        if (!appConfirmSafe(`Remove ${p.name} and their progress from this device?`)) return;
+        localStorage.removeItem(STORAGE_KEY + "::" + p.id);
+        const remaining = profiles.filter((x) => x.id !== p.id);
+        saveProfiles(remaining);
+        if (ACTIVE_PROFILE.id === p.id) {
+          ACTIVE_PROFILE.id = remaining[0].id;
+          localStorage.setItem(ACTIVE_PROFILE_KEY, remaining[0].id);
+          state.progress = loadProgress();
+        }
+        render();
+      };
+      chip.appendChild(del);
+    }
+    el.appendChild(chip);
+  }
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "profile-chip profile-add";
+  addBtn.textContent = "+ Add athlete";
+  addBtn.onclick = () => {
+    addBtn.remove();
+    const form = document.createElement("form");
+    form.className = "profile-add-form";
+    form.innerHTML = `<input type="text" maxlength="20" placeholder="Name" required />
+      <button type="submit" class="signup-btn">Add</button>`;
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const name = form.querySelector("input").value.trim();
+      if (!name) return;
+      const profiles2 = loadProfiles() || [];
+      const id = "p" + Date.now().toString(36);
+      profiles2.push({ id, name });
+      saveProfiles(profiles2);
+      ACTIVE_PROFILE.id = id;
+      localStorage.setItem(ACTIVE_PROFILE_KEY, id);
+      state.progress = loadProgress();
+      render();
+    };
+    el.appendChild(form);
+    form.querySelector("input").focus();
+  };
+  el.appendChild(addBtn);
+}
+
+function appConfirmSafe(msg) {
+  try {
+    return window.confirm(msg);
+  } catch {
+    return true;
+  }
 }
 
 function renderSportSwitch() {
