@@ -301,7 +301,12 @@ function renderMeals() {
           <select name="sex"><option value="m">Male</option><option value="f">Female</option></select></label>
         <label>Age <input name="age" type="number" min="18" max="99" required /></label>
         <label><span id="lbl-w">${imperial ? "Weight (lb)" : "Weight (kg)"}</span> <input name="weight" type="number" min="1" step="any" required /></label>
-        <label><span id="lbl-h">${imperial ? "Height (in)" : "Height (cm)"}</span> <input name="height" type="number" min="1" step="any" required /></label>
+        <label id="height-imperial" ${imperial ? "" : 'style="display:none"'}><span>Height (ft / in)</span>
+          <span class="height-pair">
+            <input name="heightFt" type="number" min="3" max="8" step="1" placeholder="ft" ${imperial ? "required" : ""} />
+            <input name="heightIn" type="number" min="0" max="11.5" step="any" placeholder="in" />
+          </span></label>
+        <label id="height-metric" ${imperial ? 'style="display:none"' : ""}><span id="lbl-h">Height (cm)</span> <input name="height" type="number" min="1" step="any" ${imperial ? "" : "required"} /></label>
         <label>Activity
           <select name="activity">
             <option value="1.2">Mostly sitting</option>
@@ -364,7 +369,12 @@ function renderMeals() {
     form.sex.value = s.sex;
     form.age.value = s.age;
     form.weight.value = s.weight;
-    form.height.value = s.height;
+    if (imperial) {
+      form.heightFt.value = Math.floor(s.height / 12);
+      form.heightIn.value = Math.round((s.height % 12) * 2) / 2;
+    } else {
+      form.height.value = s.height;
+    }
     form.activity.value = String(s.activity);
     form.goal.value = String(s.goal);
     if (s.targetWeight > 0) form.targetWeight.value = s.targetWeight;
@@ -374,15 +384,27 @@ function renderMeals() {
   document.getElementById("meals-unit").onclick = () => {
     const toMetric = form.dataset.unit === "lb";
     const w = parseFloat(form.weight.value);
-    const h = parseFloat(form.height.value);
     if (w > 0) form.weight.value = toMetric ? Math.round(w / 2.2046 * 10) / 10 : Math.round(w * 2.2046 * 10) / 10;
-    if (h > 0) form.height.value = toMetric ? Math.round(h * 2.54 * 10) / 10 : Math.round(h / 2.54 * 10) / 10;
+    if (toMetric) {
+      const totalIn = (parseFloat(form.heightFt.value) || 0) * 12 + (parseFloat(form.heightIn.value) || 0);
+      if (totalIn > 0) form.height.value = Math.round(totalIn * 2.54 * 10) / 10;
+    } else {
+      const cm = parseFloat(form.height.value);
+      if (cm > 0) {
+        const totalIn = cm / 2.54;
+        form.heightFt.value = Math.floor(totalIn / 12);
+        form.heightIn.value = Math.round((totalIn % 12) * 2) / 2;
+      }
+    }
+    document.getElementById("height-imperial").style.display = toMetric ? "none" : "";
+    document.getElementById("height-metric").style.display = toMetric ? "" : "none";
+    form.heightFt.required = !toMetric;
+    form.height.required = toMetric;
     const tw = parseFloat(form.targetWeight.value);
     if (tw > 0) form.targetWeight.value = toMetric ? Math.round(tw / 2.2046 * 10) / 10 : Math.round(tw * 2.2046 * 10) / 10;
     document.getElementById("lbl-tw").textContent = toMetric ? "Target weight (kg, optional)" : "Target weight (lb, optional)";
     form.dataset.unit = toMetric ? "kg" : "lb";
     document.getElementById("lbl-w").textContent = toMetric ? "Weight (kg)" : "Weight (lb)";
-    document.getElementById("lbl-h").textContent = toMetric ? "Height (cm)" : "Height (in)";
     document.getElementById("meals-unit").textContent = toMetric ? "kg/cm" : "lb/in";
     const saved = mealSettings();
     if (saved && !saved.incomplete) {
@@ -408,7 +430,9 @@ function renderMeals() {
       sex: form.sex.value,
       age: parseInt(form.age.value, 10),
       weight: parseFloat(form.weight.value),
-      height: parseFloat(form.height.value),
+      height: form.dataset.unit === "lb"
+        ? (parseFloat(form.heightFt.value) || 0) * 12 + (parseFloat(form.heightIn.value) || 0)
+        : parseFloat(form.height.value),
       activity: parseFloat(form.activity.value),
       goal: form.goal.value === "target" ? "target" : parseInt(form.goal.value, 10),
       targetWeight: parseFloat(form.targetWeight.value) || 0,
