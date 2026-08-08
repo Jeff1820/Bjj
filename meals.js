@@ -208,19 +208,26 @@ function goalLine(s, t) {
     A sustainable pace is roughly 0.5–1${unit === "lb" ? " lb" : "% bodyweight"} per week — progress won't be perfectly linear, and that's normal.</p>`;
 }
 
+/* Format a portion in the user's units: oz for lb/in mode, grams for kg/cm. */
+function fmtQty(grams, unit) {
+  if (unit !== "lb") return `${grams}g`;
+  const oz = Math.round((grams / 28.3495) * 2) / 2;
+  return `${oz % 1 === 0 ? oz : oz.toFixed(1)} oz`;
+}
+
 /* Scale one dish to a meal's calorie/protein share. */
-function buildDish(dish, proteinKey, mealKcal, mealProtein) {
+function buildDish(dish, proteinKey, mealKcal, mealProtein, unit) {
   const pFood = FOODS[proteinKey];
   const cFood = FOODS[dish.c];
   const pGrams = Math.max(0, Math.round(((mealProtein / pFood.p) * 100) / 10) * 10);
   let used = kcalOf(pFood, pGrams);
-  const parts = [`${pGrams}g ${pFood.name}`];
+  const parts = [`${fmtQty(pGrams, unit)} ${pFood.name}`];
   for (const [xKey, xGrams] of dish.x) {
     used += kcalOf(FOODS[xKey], xGrams);
-    parts.push(`${xGrams}g ${FOODS[xKey].name}`);
+    parts.push(`${fmtQty(xGrams, unit)} ${FOODS[xKey].name}`);
   }
   const cGrams = Math.max(0, Math.round(((mealKcal - used) / kcalOf(cFood, 100)) * 100 / 10) * 10);
-  parts.splice(1, 0, `${cGrams}g ${cFood.name}`);
+  parts.splice(1, 0, `${fmtQty(cGrams, unit)} ${cFood.name}`);
   return `${dish.n.replace("{P}", pFood.name)}: ${parts.join(" + ")}`;
 }
 
@@ -444,11 +451,11 @@ function renderMealPlan(s) {
         const options = [0, 1].map((k) => {
           const [cKey, pKey] = combos[(i * 2 + k) % combos.length];
           const dish = CUISINES[cKey].dishes[(i + k) % CUISINES[cKey].dishes.length];
-          return `<li><em>${CUISINES[cKey].label}:</em> ${buildDish(dish, pKey, mealKcal, mealProtein)}</li>`;
+          return `<li><em>${CUISINES[cKey].label}:</em> ${buildDish(dish, pKey, mealKcal, mealProtein, s.unit)}</li>`;
         });
         if (i === 0 && s.meals >= 3) {
           const pG = Math.round(((mealProtein * 0.6) / FOODS.yogurt.p) * 100 / 10) * 10;
-          options.push(`<li><em>Breakfast classic:</em> ${pG}g Greek yogurt + 80g dry oats + 100g berries</li>`);
+          options.push(`<li><em>Breakfast classic:</em> ${fmtQty(pG, s.unit)} Greek yogurt + ${fmtQty(80, s.unit)} dry oats + ${fmtQty(100, s.unit)} berries</li>`);
         }
         return `
           <div class="meal-card ${day.checks[i] ? "done" : ""}">
@@ -458,8 +465,9 @@ function renderMealPlan(s) {
           </div>`;
       }).join("")}
     </div>
-    <p class="meals-note">Pick either option per meal — portions are scaled to that meal's calorie and
-       protein share. Swap equivalent proteins/carbs freely; add sauces and cooking oil mindfully
+    <p class="meals-note">Pick either option per meal — portions are cooked weights scaled to that meal's
+       calorie and protein share, shown in ${s.unit === "lb" ? "ounces (switch to kg/cm for grams)" : "grams (switch to lb/in for ounces)"}.
+       Swap equivalent proteins/carbs freely; add sauces and cooking oil mindfully
        (each tablespoon of oil is ~120 kcal).</p>`;
 
   el.querySelectorAll(".meal-check input").forEach((box) => {
