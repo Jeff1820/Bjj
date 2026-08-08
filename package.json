@@ -2,16 +2,20 @@
   "name": "bjj-tracker",
   "version": "1.0.0",
   "private": true,
-  "description": "BJJ belt progression tracker with video demonstrations and IBJJF rules",
+  "description": "Multi-sport progression tracker (BJJ, Judo, Boxing, CrossFit) with video demonstrations and competition rules",
   "scripts": {
-    "build": "rm -rf www && mkdir www && cp index.html styles.css data.js videos.js app.js manifest.webmanifest sw.js icon-*.png www/",
+    "build": "rm -rf www && mkdir www && cp index.html styles.css data.js data-judo.js data-boxing.js data-crossfit.js videos.js app.js manifest.webmanifest sw.js icon-*.png purelab-logo.png bg-rolling.jpg www/",
     "ios:init": "npm run build && npx cap add ios && npx cap sync ios",
     "ios:sync": "npm run build && npx cap sync ios",
-    "ios:open": "npx cap open ios"
+    "ios:open": "npx cap open ios",
+    "android:init": "npm run build && npx cap add android && npx cap sync android",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
     "@capacitor/core": "^6.0.0",
-    "@capacitor/ios": "^6.0.0"
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
   }
 }
