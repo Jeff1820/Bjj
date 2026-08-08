@@ -300,8 +300,8 @@ function renderMeals() {
         <label>Sex
           <select name="sex"><option value="m">Male</option><option value="f">Female</option></select></label>
         <label>Age <input name="age" type="number" min="18" max="99" required /></label>
-        <label>Weight (<span id="unit-w">${imperial ? "lb" : "kg"}</span>) <input name="weight" type="number" min="1" step="any" required /></label>
-        <label>Height (<span id="unit-h">${imperial ? "in" : "cm"}</span>) <input name="height" type="number" min="1" step="any" required /></label>
+        <label><span id="lbl-w">${imperial ? "Weight (lb)" : "Weight (kg)"}</span> <input name="weight" type="number" min="1" step="any" required /></label>
+        <label><span id="lbl-h">${imperial ? "Height (in)" : "Height (cm)"}</span> <input name="height" type="number" min="1" step="any" required /></label>
         <label>Activity
           <select name="activity">
             <option value="1.2">Mostly sitting</option>
@@ -309,7 +309,7 @@ function renderMeals() {
             <option value="1.55" selected>Train 3-5x/week</option>
             <option value="1.725">Train 6-7x/week</option>
           </select></label>
-        <label>Target weight (<span id="unit-tw">${imperial ? "lb" : "kg"}</span>, optional)
+        <label><span id="lbl-tw">${imperial ? "Target weight (lb, optional)" : "Target weight (kg, optional)"}</span>
           <input name="targetWeight" type="number" min="1" step="any" /></label>
         <label>Goal
           <select name="goal">
@@ -379,10 +379,10 @@ function renderMeals() {
     if (h > 0) form.height.value = toMetric ? Math.round(h * 2.54 * 10) / 10 : Math.round(h / 2.54 * 10) / 10;
     const tw = parseFloat(form.targetWeight.value);
     if (tw > 0) form.targetWeight.value = toMetric ? Math.round(tw / 2.2046 * 10) / 10 : Math.round(tw * 2.2046 * 10) / 10;
-    document.getElementById("unit-tw").textContent = toMetric ? "kg" : "lb";
+    document.getElementById("lbl-tw").textContent = toMetric ? "Target weight (kg, optional)" : "Target weight (lb, optional)";
     form.dataset.unit = toMetric ? "kg" : "lb";
-    document.getElementById("unit-w").textContent = toMetric ? "kg" : "lb";
-    document.getElementById("unit-h").textContent = toMetric ? "cm" : "in";
+    document.getElementById("lbl-w").textContent = toMetric ? "Weight (kg)" : "Weight (lb)";
+    document.getElementById("lbl-h").textContent = toMetric ? "Height (cm)" : "Height (in)";
     document.getElementById("meals-unit").textContent = toMetric ? "kg/cm" : "lb/in";
     const saved = mealSettings();
     if (saved && !saved.incomplete) {
@@ -430,9 +430,8 @@ function renderMealPlan(s) {
     .map((v) => v / (s.splits ? s.splits.reduce((a, b) => a + b, 0) : 100));
   const day = mealDayState(s.meals);
 
-  // Rotate through every cuisine x protein combination for variety.
-  const combos = [];
-  for (const c of s.cuisines) for (const p of s.proteins) combos.push([c, p]);
+  // Rotate cuisines and proteins independently so variety shows immediately.
+  const pickCombo = (idx) => [s.cuisines[idx % s.cuisines.length], s.proteins[idx % s.proteins.length]];
 
   const el = document.getElementById("meals-plan");
   el.innerHTML = `
@@ -449,7 +448,7 @@ function renderMealPlan(s) {
         const mealKcal = Math.round(t.calories * splits[i]);
         const mealProtein = Math.round(t.protein * splits[i]);
         const options = [0, 1].map((k) => {
-          const [cKey, pKey] = combos[(i * 2 + k) % combos.length];
+          const [cKey, pKey] = pickCombo(i * 2 + k);
           const dish = CUISINES[cKey].dishes[(i + k) % CUISINES[cKey].dishes.length];
           return `<li><em>${CUISINES[cKey].label}:</em> ${buildDish(dish, pKey, mealKcal, mealProtein, s.unit)}</li>`;
         });
