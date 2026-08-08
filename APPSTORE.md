@@ -70,6 +70,49 @@ npm run ios:sync     # re-copies web files and syncs the iOS project
 ```
 Then re-archive and upload in Xcode.
 
+---
+
+## Android / Google Play
+
+Android does NOT require a Mac — Android Studio runs on Windows, macOS, or Linux.
+
+| Requirement | Cost / notes |
+| --- | --- |
+| Google Play developer account | $25 one-time — play.google.com/console |
+| Android Studio | free — developer.android.com/studio |
+| Node.js | free |
+
+```bash
+npm install
+npm run android:init   # creates the android/ project
+npm run android:open   # opens it in Android Studio
+```
+
+In Android Studio: run on an emulator or device to test, then
+**Build → Generate Signed App Bundle** (create a keystore when prompted —
+BACK IT UP, losing it means you can never update the app). Upload the .aab
+in the Play Console, fill in the listing (screenshots, privacy policy,
+data-safety form declaring email collection for marketing), and submit.
+Play review usually takes hours to a day.
+
+### After every app update
+
+```bash
+npm run android:sync
+```
+Then regenerate the signed bundle and upload.
+
+---
+
+## Update rhythm across all three channels
+
+1. **Web/PWA (GitHub Pages)**: push to main → users get it automatically on
+   next visit. Instant, no review. This is the primary channel.
+2. **iOS**: batch changes, then `npm run ios:sync` → bump version → Archive →
+   upload → review (1-3 days).
+3. **Android**: `npm run android:sync` → signed bundle → Play Console →
+   review (hours). Keep iOS and Android version numbers in step.
+
 ### Review tips
 
 - Apple sometimes flags apps that are "just a website" (guideline 4.2). This
