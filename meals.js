@@ -250,8 +250,11 @@ function renderMeals() {
 
   host.innerHTML = `
     <div class="panel-body meals-body">
-      <h2>🍎 Meal Plan${s ? "" : " — set up your plan"}</h2>
-      <form id="meals-form" class="meals-form">
+      <div class="meals-head">
+        <h2>🍎 Meal Plan${s ? "" : " — set up your plan"}</h2>
+        <button type="button" class="lift-unit" id="meals-unit">${imperial ? "lb/in" : "kg/cm"}</button>
+      </div>
+      <form id="meals-form" class="meals-form" data-unit="${imperial ? "lb" : "kg"}">
         <label>Calories
           <select name="calMode">
             <option value="auto">Calculate for me</option>
@@ -262,8 +265,8 @@ function renderMeals() {
         <label>Sex
           <select name="sex"><option value="m">Male</option><option value="f">Female</option></select></label>
         <label>Age <input name="age" type="number" min="18" max="99" required /></label>
-        <label>Weight (${imperial ? "lb" : "kg"}) <input name="weight" type="number" min="1" step="0.5" required /></label>
-        <label>Height (${imperial ? "in" : "cm"}) <input name="height" type="number" min="1" step="0.5" required /></label>
+        <label>Weight (<span id="unit-w">${imperial ? "lb" : "kg"}</span>) <input name="weight" type="number" min="1" step="any" required /></label>
+        <label>Height (<span id="unit-h">${imperial ? "in" : "cm"}</span>) <input name="height" type="number" min="1" step="any" required /></label>
         <label>Activity
           <select name="activity">
             <option value="1.2">Mostly sitting</option>
@@ -279,7 +282,6 @@ function renderMeals() {
           </select></label>
         <label>Meals/day
           <select name="meals">${[1, 2, 3, 4, 5].map((n) => `<option ${n === mealsCount ? "selected" : ""}>${n}</option>`).join("")}</select></label>
-        <button type="button" class="lift-unit" id="meals-unit">${imperial ? "lb/in" : "kg/cm"}</button>
       </form>
       <div class="meals-split" id="meals-split"></div>
       <div class="meals-prefs">
@@ -331,15 +333,22 @@ function renderMeals() {
   syncCalMode();
 
   document.getElementById("meals-unit").onclick = () => {
-    if (s) {
-      s.weight = imperial ? Math.round(s.weight / 2.2046) : Math.round(s.weight * 2.2046);
-      s.height = imperial ? Math.round(s.height * 2.54) : Math.round(s.height / 2.54);
-      s.unit = imperial ? "kg" : "lb";
-      saveMealSettings(s);
-    } else {
-      saveMealSettings({ unit: imperial ? "kg" : "lb", incomplete: true });
+    const toMetric = form.dataset.unit === "lb";
+    const w = parseFloat(form.weight.value);
+    const h = parseFloat(form.height.value);
+    if (w > 0) form.weight.value = toMetric ? Math.round(w / 2.2046 * 10) / 10 : Math.round(w * 2.2046 * 10) / 10;
+    if (h > 0) form.height.value = toMetric ? Math.round(h * 2.54 * 10) / 10 : Math.round(h / 2.54 * 10) / 10;
+    form.dataset.unit = toMetric ? "kg" : "lb";
+    document.getElementById("unit-w").textContent = toMetric ? "kg" : "lb";
+    document.getElementById("unit-h").textContent = toMetric ? "cm" : "in";
+    document.getElementById("meals-unit").textContent = toMetric ? "kg/cm" : "lb/in";
+    const saved = mealSettings();
+    if (saved && !saved.incomplete) {
+      saved.weight = toMetric ? Math.round(saved.weight / 2.2046 * 10) / 10 : Math.round(saved.weight * 2.2046 * 10) / 10;
+      saved.height = toMetric ? Math.round(saved.height * 2.54 * 10) / 10 : Math.round(saved.height / 2.54 * 10) / 10;
+      saved.unit = toMetric ? "kg" : "lb";
+      saveMealSettings(saved);
     }
-    render();
   };
 
   document.getElementById("meals-generate").onclick = () => {
@@ -350,7 +359,7 @@ function renderMeals() {
     const chosenProteins = [...document.querySelectorAll('[name="protein"]:checked')].map((el) => el.value);
     const chosenCuisines = [...document.querySelectorAll('[name="cuisine"]:checked')].map((el) => el.value);
     const settings = {
-      unit: imperial ? "lb" : "kg",
+      unit: form.dataset.unit,
       calMode: form.calMode.value,
       customCal: parseInt(form.customCal.value, 10) || 0,
       sex: form.sex.value,

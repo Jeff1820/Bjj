@@ -60,3 +60,10 @@ any service that accepts a JSON or form POST with an `email` field.
 - Keep the signup optional and non-blocking. Apple rejects apps that gate
   functionality behind marketing signups; the tracker must stay fully usable
   without an email.
+
+## TODO: Distribute from purelabperformance.com
+
+When ready, add a "Get the free training app" page/button on the WordPress
+site pointing at the GitHub Pages URL, with Add-to-Home-Screen install
+instructions and a QR code; embed option and store badges later. (The site
+is WordPress — this page can be created directly via the connected tools.)

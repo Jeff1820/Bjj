@@ -854,3 +854,7 @@ footer {
 #meals-generate { margin-bottom: 16px; }
 
 @media (max-width: 640px) { .meals-prefs { grid-template-columns: 1fr; } }
+
+.meals-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+
+.meals-head h2 { margin: 0; }
