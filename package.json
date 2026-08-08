@@ -4,7 +4,7 @@
   "private": true,
   "description": "Multi-sport progression tracker (BJJ, Judo, Boxing, CrossFit) with video demonstrations and competition rules",
   "scripts": {
-    "build": "rm -rf www && mkdir www && cp index.html styles.css data.js data-judo.js data-boxing.js data-crossfit.js data-weightlifting.js videos.js app.js meals.js manifest.webmanifest sw.js icon-*.png purelab-logo.png bg-*.jpg www/",
+    "build": "rm -rf www && mkdir www && cp index.html styles.css data.js data-judo.js data-boxing.js data-crossfit.js data-weightlifting.js videos.js app.js meals.js workouts.js manifest.webmanifest sw.js icon-*.png purelab-logo.png bg-*.jpg www/",
     "ios:init": "npm run build && npx cap add ios && npx cap sync ios",
     "ios:sync": "npm run build && npx cap sync ios",
     "ios:open": "npx cap open ios",
