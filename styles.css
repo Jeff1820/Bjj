@@ -453,10 +453,12 @@ button.lift-log-btn:hover { background: color-mix(in srgb, var(--success) 22%, t
   padding: 12px 14px;
 }
 
-.lift-form { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; }
+.lift-form { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
 
 .lift-form input {
-  width: 84px;
+  width: 70px;
+  flex: 1 1 60px;
+  min-width: 0;
   padding: 7px 10px;
   font: inherit;
   color: var(--text);
