@@ -15,7 +15,7 @@ const BRAND = {
   tagline: "your edge in sports recovery & performance",
 };
 
-const SIGNUP_ENDPOINT = "";
+const SIGNUP_ENDPOINT = "https://formspree.io/f/xdenapgr";
 const SIGNUP_CONTACT_EMAIL = "jeff.centralcc@gmail.com";
 const SIGNUP_DONE_KEY = "bjj-signup-done";
 const SIGNUP_HIDE_KEY = "bjj-signup-dismissed";
