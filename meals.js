@@ -240,6 +240,9 @@ function mealDayState(mealCount) {
   if (!day || day.date !== today || day.checks.length !== mealCount) {
     day = { date: today, checks: new Array(mealCount).fill(false) };
   }
+  if (!Array.isArray(day.shuffles) || day.shuffles.length !== mealCount) {
+    day.shuffles = new Array(mealCount).fill(0);
+  }
   return day;
 }
 
@@ -471,9 +474,10 @@ function renderMealPlan(s) {
       ${Array.from({ length: s.meals }, (_, i) => {
         const mealKcal = Math.round(t.calories * splits[i]);
         const mealProtein = Math.round(t.protein * splits[i]);
+        const shift = day.shuffles[i] || 0;
         const options = [0, 1].map((k) => {
-          const [cKey, pKey] = pickCombo(i * 2 + k);
-          const dish = CUISINES[cKey].dishes[(i + k) % CUISINES[cKey].dishes.length];
+          const [cKey, pKey] = pickCombo(i * 2 + k + shift);
+          const dish = CUISINES[cKey].dishes[(i + k + shift) % CUISINES[cKey].dishes.length];
           return `<li><em>${CUISINES[cKey].label}:</em> ${buildDish(dish, pKey, mealKcal, mealProtein, s.unit)}</li>`;
         });
         if (i === 0 && s.meals >= 3) {
@@ -482,8 +486,11 @@ function renderMealPlan(s) {
         }
         return `
           <div class="meal-card ${day.checks[i] ? "done" : ""}">
-            <label class="meal-check"><input type="checkbox" data-i="${i}" ${day.checks[i] ? "checked" : ""}/>
-              <strong>${mealLabel(i, s.meals)}</strong> · ${Math.round(splits[i] * 100)}% · ~${mealKcal} kcal · ${mealProtein}g protein</label>
+            <div class="meal-head">
+              <label class="meal-check"><input type="checkbox" data-i="${i}" ${day.checks[i] ? "checked" : ""}/>
+                <strong>${mealLabel(i, s.meals)}</strong> · ${Math.round(splits[i] * 100)}% · ~${mealKcal} kcal · ${mealProtein}g protein</label>
+              <button type="button" class="meal-shuffle" data-shuffle="${i}" title="New ideas for this meal">🔄 New ideas</button>
+            </div>
             <ul>${options.join("")}</ul>
           </div>`;
       }).join("")}
@@ -492,6 +499,15 @@ function renderMealPlan(s) {
        calorie and protein share, shown in ${s.unit === "lb" ? "ounces (switch to kg/cm for grams)" : "grams (switch to lb/in for ounces)"}.
        Swap equivalent proteins/carbs freely; add sauces and cooking oil mindfully
        (each tablespoon of oil is ~120 kcal).</p>`;
+
+  el.querySelectorAll(".meal-shuffle").forEach((btn) => {
+    btn.onclick = () => {
+      const d = mealDayState(s.meals);
+      d.shuffles[parseInt(btn.dataset.shuffle, 10)] += 2;
+      saveMealDay(d);
+      renderMealPlan(s);
+    };
+  });
 
   el.querySelectorAll(".meal-check input").forEach((box) => {
     box.onchange = () => {
