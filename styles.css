@@ -738,3 +738,70 @@ footer {
   .belt-chip { flex-basis: 100%; }
   .panel-body { padding: 14px; }
 }
+
+/* Meal Plan tab */
+.meals-body h2 { margin: 0 0 14px; }
+
+.meals-agegate { max-width: 520px; margin: 20px auto; text-align: center; }
+
+.meals-agegate p { color: var(--muted); }
+
+.meals-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px 14px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.meals-form label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); font-weight: 600; white-space: nowrap; }
+
+.meals-form input, .meals-form select {
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.meals-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.meals-stats div {
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.meals-stats strong { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+
+.meals-stats span { font-size: 0.8rem; color: var(--muted); }
+
+.meals-grid { display: grid; gap: 12px; }
+
+.meal-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.meal-card.done { background: color-mix(in srgb, var(--success) 8%, var(--panel)); border-color: var(--success); }
+
+.meal-check { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+
+.meal-check input { width: 18px; height: 18px; accent-color: var(--success); }
+
+.meal-card ul { margin: 8px 0 0; padding-left: 24px; font-size: 0.92rem; }
+
+.meal-card li { margin-bottom: 4px; }
+
+.meals-note, .meals-disclaimer { font-size: 0.82rem; color: var(--muted); margin-top: 14px; }
+
+.meals-floor { color: var(--danger); font-size: 0.9rem; font-weight: 600; }

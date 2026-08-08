@@ -1825,5 +1825,361 @@ const VIDEO_LINKS = {
   "De-ashi-barai counter timing (tsubame-gaeshi intro)": {
     "url": "https://www.youtube.com/watch?v=I-TCNSVwg0g",
     "title": "Tsubame Gaeshi || Swallow Counter"
+  },
+  "Bodyweight box squat to parallel with controlled tempo": {
+    "url": "https://www.youtube.com/watch?v=7LpLZOdz68A",
+    "title": "Bodyweight Box Squat | Step-by-Step Tutorial"
+  },
+  "Bench press with empty bar, controlled touch and press": {
+    "url": "https://www.youtube.com/watch?v=4Y2ZdHCOXok",
+    "title": "How to PROPERLY Bench Press for Growth (5 Easy Steps)"
+  },
+  "Barbell deadlift from blocks with light plates": {
+    "url": "https://www.youtube.com/watch?v=F6cZbkUOBiI",
+    "title": "The Block Pull: Gym Shorts (How To)"
+  },
+  "Couch stretch for hip flexors": {
+    "url": "https://www.youtube.com/watch?v=WKo4APrwfXQ",
+    "title": "Couch Stretch Progressions: Beginner To Advanced"
+  },
+  "Back squat 1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=8PMjqgR8Wa8",
+    "title": "How to Barbell Back Squat | A Tutorial for Beginners"
+  },
+  "Overhead press 0.5x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=nNMR9fRGRjQ",
+    "title": "How to Press: Proper Overhead Press Form (Step-by-Step Tutorial)"
+  },
+  "Kettlebell swing 3x15": {
+    "url": "https://www.youtube.com/watch?v=bDCeXbMJVNs",
+    "title": "How To Kettlebell Swing (in 3 minutes)"
+  },
+  "Thoracic spine foam rolling before pressing": {
+    "url": "https://www.youtube.com/watch?v=NS73eSohTbc",
+    "title": "Self Myofascial Release: Foam Rolling - Thoracic Spine"
+  },
+  "Bench press 1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=gRVjAtPip0Y",
+    "title": "How to Perform Bench Press - Tutorial & Proper Form"
+  },
+  "Deficit deadlift 3x5": {
+    "url": "https://www.youtube.com/watch?v=3KQP-CNKr9U",
+    "title": "Deficit Deadlift: Gym Shorts (How To)"
+  },
+  "Weighted pull-up 3x5": {
+    "url": "https://www.youtube.com/watch?v=fnJ0F1Xsu7Y",
+    "title": "Weighted Pull-Ups (How To)"
+  },
+  "Pigeon pose 2 minutes per side": {
+    "url": "https://www.youtube.com/watch?v=M1gEGLtF1p0",
+    "title": "How To Do Pigeon Pose | The Right Way | Well+Good"
+  },
+  "Paused competition bench press, motionless on the chest": {
+    "url": "https://www.youtube.com/watch?v=K4BIkKGKy9k",
+    "title": "Paused Bench Press: Gym Shorts (How To)"
+  },
+  "Power clean 1.25x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=lI35socHJ4k",
+    "title": "How To Power Clean: Step by Step Beginner's Tutorial"
+  },
+  "Belt squat or leg press volume work for joint-friendly hypertrophy": {
+    "url": "https://www.youtube.com/watch?v=h_ok0J0y5j4",
+    "title": "Belt Squat Breakdown: How, Why & When to Use It"
+  },
+  "Competition squat executed on squat and rack commands to IPF depth": {
+    "url": "https://www.youtube.com/watch?v=MGD0UmsZnek",
+    "title": "Squats In 60 Seconds - IPF Rules Simplified"
+  },
+  "Overhead press 1.25x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=zoN5EH50Dro",
+    "title": "Perfect Overhead Press Form (DO THIS!)"
+  },
+  "Snatch at bodyweight for athletic power maintenance": {
+    "url": "https://www.youtube.com/watch?v=3O7JjPr0_ok",
+    "title": "How to Snatch (Step-by-Step Olympic Weightlifting Tutorial)"
+  },
+  "Landmine press for shoulder-friendly overhead work": {
+    "url": "https://www.youtube.com/watch?v=7Sv6hfQNFAA",
+    "title": "How to Perform the Landmine Press"
+  },
+  "Safety bar squat as a knee- and shoulder-friendly variation": {
+    "url": "https://www.youtube.com/watch?v=CMn1Z9pzZAk",
+    "title": "Safety Squat Bar Squat (SSB Squat): How To (Gym Shorts)"
+  },
+  "Chin-up 5 strict reps": {
+    "url": "https://www.youtube.com/watch?v=e1YSApl-QcM",
+    "title": "PERFECT CHIN-UPS | The Only Chin-up Tutorial You'll Ever Need"
+  },
+  "Paused bench press to competition standard": {
+    "url": "https://www.youtube.com/watch?v=IChCJIGfmQI",
+    "title": "Paused Bench Press | Proper Form Tutorial for Strength & Control"
+  },
+  "Daily hip and shoulder maintenance routine": {
+    "url": "https://www.youtube.com/watch?v=gDG9QoYpqtU",
+    "title": "Unlock Tight Hips & Shoulders in 8 Minutes - Beginner Follow Along"
+  },
+  "Goblet squat 3x10 with dumbbell or kettlebell": {
+    "url": "https://www.youtube.com/watch?v=BR4tlEE_A98",
+    "title": "Goblet Squat | Proper Form Tutorial"
+  },
+  "Dumbbell overhead press 3x8": {
+    "url": "https://www.youtube.com/watch?v=prP9rHHp0tg",
+    "title": "Dumbbell Overhead Press | Exercise Technique Library"
+  },
+  "Overhead squat with PVC pipe": {
+    "url": "https://www.youtube.com/watch?v=mkG9HzfT9P4",
+    "title": "Teaching the Overhead Squat (PVC)"
+  },
+  "Ankle dorsiflexion wall drill": {
+    "url": "https://www.youtube.com/watch?v=Y1IZXkdPPdw",
+    "title": "Knee to Wall Ankle Mobility Drill"
+  },
+  "Front squat technique with light load": {
+    "url": "https://www.youtube.com/watch?v=v-mQm_droHg",
+    "title": "HOW TO FRONT SQUAT: Build Bigger Quads & A Stronger Squat"
+  },
+  "Deadlift 1x5 top set, resetting each rep on the floor": {
+    "url": "https://www.youtube.com/watch?v=GxsLrTzyGUU",
+    "title": "How to Do A Conventional Deadlift Correctly"
+  },
+  "Barbell row 3x8": {
+    "url": "https://www.youtube.com/watch?v=A1tmBJKKfVs",
+    "title": "How To Barbell Row: Programming & Proper Form"
+  },
+  "90/90 hip stretch": {
+    "url": "https://www.youtube.com/watch?v=t4Zz6-aG8Iw",
+    "title": "90 90 Hip Stretch (Best Hip Mobility Exercise!)"
+  },
+  "Overhead press 0.75x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=a81SaIpjGlA",
+    "title": "Overhead Press (Barbell) - Proper Form & Technique"
+  },
+  "Barbell hip thrust 3x8": {
+    "url": "https://www.youtube.com/watch?v=S_uZP4UH6J0",
+    "title": "How To Do A Barbell Hip Thrust The RIGHT Way!"
+  },
+  "Dips 3x10": {
+    "url": "https://www.youtube.com/watch?v=K5JxupmoLW4",
+    "title": "PERFECT DIPS | The Only Dip Tutorial You'll Ever Need"
+  },
+  "Competition squat with walkout, depth below parallel, and rack command": {
+    "url": "https://www.youtube.com/watch?v=MGD0UmsZnek",
+    "title": "Squats In 60 Seconds - IPF Rules Simplified"
+  },
+  "Overhead press 1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=iJ0py9JQIZY",
+    "title": "How To Barbell Press | The Starting Strength Method"
+  },
+  "Power snatch with moderate load": {
+    "url": "https://www.youtube.com/watch?v=ydHHsju1-Nc",
+    "title": "Power Snatch | Olympic Weightlifting Exercise Library"
+  },
+  "Banded shoulder dislocates and pass-throughs": {
+    "url": "https://www.youtube.com/watch?v=riVxa9By-pM",
+    "title": "How To Do Band Dislocates / Pass-Throughs (Shoulder Mobility)"
+  },
+  "Heavy single at RPE 9 with handoff and spotter team": {
+    "url": "https://www.youtube.com/watch?v=LXsd_rKFz9s",
+    "title": "How to Hand Off a Powerlifting Bench Press"
+  },
+  "Deadlift 3x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=Y1IGeJEXpF4",
+    "title": "How To Deadlift"
+  },
+  "Box squat to parallel with controlled tempo": {
+    "url": "https://www.youtube.com/watch?v=j4Tu3rVThFM",
+    "title": "How to Box Squat CORRECTLY (SAVE YOUR KNEES!)"
+  },
+  "Trap bar deadlift 3x8": {
+    "url": "https://www.youtube.com/watch?v=Vu4oXIRzx7w",
+    "title": "Trap Bar Deadlift: Gym Shorts (How To)"
+  },
+  "Overhead press 0.6x bodyweight if shoulders allow, otherwise landmine press": {
+    "url": "https://www.youtube.com/watch?v=3gYz0bLG-wY",
+    "title": "Proper Technique for The Landmine Press"
+  },
+  "Back squat 1.75x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=UFs6E3Ti1jg",
+    "title": "How To Squat - Any Style"
+  },
+  "Block pulls to manage weekly pulling volume": {
+    "url": "https://www.youtube.com/watch?v=jfSxbT-65ow",
+    "title": "The Block/Rack Pull: Untamed Special"
+  },
+  "Barbell back squat to depth with empty bar": {
+    "url": "https://www.youtube.com/watch?v=SW_C1A-rejs",
+    "title": "How To: Deep Barbell Back Squat"
+  },
+  "Hip hinge drill with dowel rod along the spine": {
+    "url": "https://www.youtube.com/watch?v=2TDgzIpR96Y",
+    "title": "Hip Hinge with Dowel | Spine Alignment & Hinge Mechanics"
+  },
+  "Box jump with soft landing mechanics": {
+    "url": "https://www.youtube.com/watch?v=NUiFHMvUmKk",
+    "title": "Box Jumps: Soft Landing"
+  },
+  "World's greatest stretch flow": {
+    "url": "https://www.youtube.com/watch?v=-CiWQ2IvY34",
+    "title": "The World's Greatest Stretch (Mobility Exercise)"
+  },
+  "Bench press 3x5 with spotter or safety arms": {
+    "url": "https://www.youtube.com/watch?v=gRVjAtPip0Y",
+    "title": "How to Perform Bench Press - Tutorial & Proper Form"
+  },
+  "Romanian deadlift 3x8": {
+    "url": "https://www.youtube.com/watch?v=5bJEigM5iVg",
+    "title": "FIX Your RDL Form! (Ultimate Romanian Deadlift Tutorial)"
+  },
+  "Chin-up 3 strict reps": {
+    "url": "https://www.youtube.com/watch?v=e1YSApl-QcM",
+    "title": "PERFECT CHIN-UPS | The Only Chin-up Tutorial You'll Ever Need"
+  },
+  "Pause squat 3x3 with 2-second hold in the hole": {
+    "url": "https://www.youtube.com/watch?v=nknf16JJTZo",
+    "title": "The Paused Squat: Gym Shorts (How To)"
+  },
+  "Close-grip bench press 3x8": {
+    "url": "https://www.youtube.com/watch?v=cXbSJHtjrQQ",
+    "title": "CLOSE GRIP PRESS | Triceps | How-To Exercise Tutorial"
+  },
+  "Power clean 1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=YG8M_-11C2A",
+    "title": "Power Clean | Olympic Weightlifting Exercise Library"
+  },
+  "Farmer's carry, heavy for 40 meters": {
+    "url": "https://www.youtube.com/watch?v=lLAw6fUccKA",
+    "title": "Farmer's Carry Tutorial - Proper Form and Technique"
+  },
+  "Tempo squat with 3-second eccentric": {
+    "url": "https://www.youtube.com/watch?v=mmb618X9Ieg",
+    "title": "The Tempo Squat: Gym Shorts (How To)"
+  },
+  "Block pull overload above knee": {
+    "url": "https://www.youtube.com/watch?v=F6cZbkUOBiI",
+    "title": "The Block Pull: Gym Shorts (How To)"
+  },
+  "Clean and jerk technique refinement": {
+    "url": "https://www.youtube.com/watch?v=bNCXgyosXlc",
+    "title": "Clean & Jerk | Olympic Weightlifting Exercise Library"
+  },
+  "Hip airplane balance drill": {
+    "url": "https://www.youtube.com/watch?v=4XCbYaQGF2o",
+    "title": "Hip Airplanes"
+  },
+  "Bench press 1.75x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=vcBig73ojpE",
+    "title": "How To Get A Huge Bench Press with PERFECT Technique"
+  },
+  "Competition deadlift with clean lockout and no hitching": {
+    "url": "https://www.youtube.com/watch?v=QpSJhj1SPbY",
+    "title": "How to Pass All Your Powerlifting Lifts (Squat, Bench, Deadlift Rules Explained)"
+  },
+  "Goblet squat 3x10": {
+    "url": "https://www.youtube.com/watch?v=BR4tlEE_A98",
+    "title": "Goblet Squat | Proper Form Tutorial"
+  },
+  "Romanian deadlift with dumbbells 3x10": {
+    "url": "https://www.youtube.com/watch?v=aa57T45iFSE",
+    "title": "How to do a Dumbbell Romanian Deadlift | NASM"
+  },
+  "Trap bar or conventional deadlift 1.5x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=Vu4oXIRzx7w",
+    "title": "Trap Bar Deadlift: Gym Shorts (How To)"
+  },
+  "Competition-depth squat practice with squat and rack commands": {
+    "url": "https://www.youtube.com/watch?v=MGD0UmsZnek",
+    "title": "Squats In 60 Seconds - IPF Rules Simplified"
+  },
+  "Power clean 0.75-1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=lI35socHJ4k",
+    "title": "How To Power Clean: Step by Step Beginner's Tutorial"
+  },
+  "Push-up 3x10 with full range of motion": {
+    "url": "https://www.youtube.com/watch?v=WDIpL0pjun0",
+    "title": "How to do a Push-Up | Proper Form & Technique | NASM"
+  },
+  "Kettlebell deadlift 3x8 with neutral back": {
+    "url": "https://www.youtube.com/watch?v=MJPGkNqAXzg",
+    "title": "How to Do a Kettlebell Deadlift | Proper Form & Technique | NASM"
+  },
+  "Plank 60 seconds": {
+    "url": "https://www.youtube.com/watch?v=mwlp75MS6Rg",
+    "title": "How to do a Plank | Proper Form & Technique | NASM"
+  },
+  "Back squat 3x5 linear progression, adding 2.5 kg per session": {
+    "url": "https://www.youtube.com/watch?v=my0tLDaWyDU",
+    "title": "How To Squat Correctly (NO BACK PAIN)"
+  },
+  "Bench press 0.75x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=gRVjAtPip0Y",
+    "title": "How to Perform Bench Press - Tutorial & Proper Form"
+  },
+  "Power clean technique with light load": {
+    "url": "https://www.youtube.com/watch?v=lI35socHJ4k",
+    "title": "How To Power Clean: Step by Step Beginner's Tutorial"
+  },
+  "Face pulls for shoulder health": {
+    "url": "https://www.youtube.com/watch?v=CU4Xc2qlLC0",
+    "title": "How To PROPERLY Do Face Pulls For Prehab & Shoulder Health"
+  },
+  "Front squat 1x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=npVgCT7NznU",
+    "title": "Front Squat 101: Beginner's Guide"
+  },
+  "Deadlift 1.75-2x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=XxWcirHIwVo",
+    "title": "How to PROPERLY Deadlift for Growth (5 Easy Steps)"
+  },
+  "Push press 3x5": {
+    "url": "https://www.youtube.com/watch?v=a8HQo8z20Uo",
+    "title": "How to PUSH PRESS: exercise demo with proper technique"
+  },
+  "Jefferson curl with light load": {
+    "url": "https://www.youtube.com/watch?v=_C9CdHrXmww",
+    "title": "JEFFERSON CURL GUIDE | How To, Benefits, and Mistakes!"
+  },
+  "Bench press 1.5x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=hWbUlkb5Ms4",
+    "title": "How To Bench Press With Perfect Technique (5 Steps)"
+  },
+  "Snatch-grip deadlift 3x5": {
+    "url": "https://www.youtube.com/watch?v=GP6VNoIZyF4",
+    "title": "Increase Your Deadlift : How To Snatch Grip Deadlift"
+  },
+  "Weighted pull-up with 0.5x bodyweight added": {
+    "url": "https://www.youtube.com/watch?v=fnJ0F1Xsu7Y",
+    "title": "Weighted Pull-Ups (How To)"
+  },
+  "Back squat 2.5x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=Uv_DKDl7EjA",
+    "title": "The Official Squat Form Checklist"
+  },
+  "Competition bench with start, press, and rack commands": {
+    "url": "https://www.youtube.com/watch?v=KuQHIBeTI6I",
+    "title": "Powerlifting Competition Commands For Bench Press"
+  },
+  "Power clean 1.5x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=ORGBFvyUwGs",
+    "title": "How To Power Clean For Beginners | Tutorial"
+  },
+  "Dumbbell bench press 3x10 with neutral grip": {
+    "url": "https://www.youtube.com/watch?v=fZuQpjhaR_M",
+    "title": "How To Do A Neutral Grip Dumbbell Press"
+  },
+  "Medicine ball throw and low box jump for power maintenance": {
+    "url": "https://www.youtube.com/watch?v=fGWz51bKPMM",
+    "title": "Juggernaut Training Systems - Medicine Ball Throw Tutorial"
+  },
+  "Hang power clean with light load": {
+    "url": "https://www.youtube.com/watch?v=22XonEeuRjk",
+    "title": "Movement Demo - Hang Power Clean"
+  },
+  "Bench press 1.25x bodyweight": {
+    "url": "https://www.youtube.com/watch?v=4Y2ZdHCOXok",
+    "title": "How to PROPERLY Bench Press for Growth (5 Easy Steps)"
+  },
+  "Weighted carries and sled drags for low-impact conditioning": {
+    "url": "https://www.youtube.com/watch?v=AUbTajVA_Cg",
+    "title": "10 Sled Dragging Variations for Strength, Health, and Performance"
   }
 };

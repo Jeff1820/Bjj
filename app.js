@@ -68,6 +68,7 @@ function initProfiles() {
 const ACTIVE_PROFILE = { id: initProfiles() };
 
 const state = {
+  view: "sports", // "sports" | "meals"
   sport: localStorage.getItem("bjj-active-sport") || "bjj",
   track: "adult",
   selectedBelt: null,
@@ -281,9 +282,15 @@ function render() {
 }
 
 function renderHeader() {
-  const sport = activeSport();
   const h1 = document.getElementById("app-title");
   const tag = document.getElementById("app-tagline");
+  if (state.view === "meals") {
+    if (h1) h1.textContent = "🍎 Meal Planner";
+    if (tag) tag.textContent = "Calorie targets and example meals built around your training — adults 18+.";
+    document.title = "Meal Planner";
+    return;
+  }
+  const sport = activeSport();
   if (h1) h1.textContent = `${sport.emoji} ${sport.appTitle}`;
   if (tag) tag.textContent = sport.tagline;
   document.title = sport.appTitle;
@@ -372,13 +379,14 @@ function renderSportSwitch() {
   for (const sport of Object.values(SPORTS)) {
     const btn = document.createElement("button");
     btn.textContent = `${sport.emoji} ${sport.label}`;
-    btn.className = sport.id === state.sport ? "active" : "";
+    btn.className = state.view === "sports" && sport.id === state.sport ? "active" : "";
     btn.onclick = () => {
-      if (sport.id === state.sport) return;
-      if (GATE_MODE === "teaser" && gateLocked()) {
+      if (state.view === "sports" && sport.id === state.sport) return;
+      if (GATE_MODE === "teaser" && gateLocked() && sport.id !== state.sport) {
         showTeaserPopup();
         return;
       }
+      state.view = "sports";
       state.sport = sport.id;
       localStorage.setItem("bjj-active-sport", sport.id);
       state.track = Object.keys(sport.tracks)[0];
@@ -388,6 +396,20 @@ function renderSportSwitch() {
     };
     el.appendChild(btn);
   }
+
+  const mealsBtn = document.createElement("button");
+  mealsBtn.textContent = "🍎 Meal Plan";
+  mealsBtn.className = state.view === "meals" ? "active" : "";
+  mealsBtn.onclick = () => {
+    if (state.view === "meals") return;
+    if (GATE_MODE === "teaser" && gateLocked()) {
+      showTeaserPopup();
+      return;
+    }
+    state.view = "meals";
+    render();
+  };
+  el.appendChild(mealsBtn);
 }
 
 function renderGate() {
@@ -521,6 +543,7 @@ function renderSignup() {
 function renderTrackSwitch() {
   const el = document.getElementById("track-switch");
   el.innerHTML = "";
+  if (state.view === "meals") return;
   for (const [trackId, track] of Object.entries(activeTracks())) {
     const btn = document.createElement("button");
     btn.textContent = track.label;
@@ -541,6 +564,7 @@ function renderTrackSwitch() {
 function renderRoadmap() {
   const el = document.getElementById("roadmap");
   el.innerHTML = "";
+  if (state.view === "meals") return;
   const belts = activeTracks()[state.track].belts;
   belts.forEach((belt, i) => {
     const { done, total } = beltCompletion(belt);
@@ -569,6 +593,10 @@ function renderRoadmap() {
 }
 
 function renderPanel() {
+  if (state.view === "meals") {
+    if (typeof renderMeals !== "undefined") renderMeals();
+    return;
+  }
   const belt = currentBelt();
   const belts = activeTracks()[state.track].belts;
   const index = belts.indexOf(belt);
