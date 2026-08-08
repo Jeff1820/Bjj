@@ -218,7 +218,9 @@ function gateLocked() {
 }
 
 async function submitUnlock(email, consent, statusEl, source) {
-  if (SIGNUP_ENDPOINT) {
+  // Preview builds run in a sandbox with no outside network — skip the POST there.
+  const canPost = typeof PREVIEW_NO_NETWORK === "undefined";
+  if (SIGNUP_ENDPOINT && canPost) {
     statusEl.textContent = "Unlocking…";
     try {
       const res = await fetch(SIGNUP_ENDPOINT, {
