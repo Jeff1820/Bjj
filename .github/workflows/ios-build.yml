@@ -16,6 +16,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      HAS_SIGNING: ${{ secrets.APPSTORE_KEY_ID != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -43,7 +45,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO build
 
       - name: Signed archive & upload to App Store Connect
-        if: ${{ secrets.APPSTORE_KEY_ID != '' }}
+        if: ${{ env.HAS_SIGNING == 'true' }}
         env:
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
