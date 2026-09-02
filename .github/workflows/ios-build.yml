@@ -1,0 +1,70 @@
+# iOS build on GitHub's free macOS runners — no local Mac needed.
+#
+# Today this validates the full iOS build (compile without signing).
+# To produce a signed, App Store-uploadable build, add these repository
+# secrets (Settings → Secrets and variables → Actions) once the Apple
+# Developer Program membership is active:
+#   APPSTORE_ISSUER_ID   — App Store Connect → Users and Access → Integrations
+#   APPSTORE_KEY_ID      — id of an App Store Connect API key (role: App Manager)
+#   APPSTORE_P8          — the .p8 private key contents for that key
+# then the "Signed archive & upload" step below activates automatically.
+name: iOS build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build store web bundle (teaser gate)
+        run: npm run build:store
+
+      - name: Generate iOS project
+        run: npx cap add ios
+
+      - name: Sync web assets into iOS project
+        run: npx cap sync ios
+
+      - name: Build (unsigned — validates the app compiles)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App \
+            -configuration Release -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO build
+
+      - name: Signed archive & upload to App Store Connect
+        if: ${{ secrets.APPSTORE_KEY_ID != '' }}
+        env:
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$APPSTORE_P8" > ~/private_keys/AuthKey_$APPSTORE_KEY_ID.p8
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App \
+            -configuration Release -sdk iphoneos \
+            -archivePath build/App.xcarchive archive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_$APPSTORE_KEY_ID.p8 \
+            -authenticationKeyID "$APPSTORE_KEY_ID" \
+            -authenticationKeyIssuerID "$APPSTORE_ISSUER_ID"
+          # export-options.plist has destination=upload, so this step also
+          # sends the build to App Store Connect (TestFlight / review).
+          xcodebuild -exportArchive -archivePath build/App.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist "$GITHUB_WORKSPACE/scripts/export-options.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_$APPSTORE_KEY_ID.p8 \
+            -authenticationKeyID "$APPSTORE_KEY_ID" \
+            -authenticationKeyIssuerID "$APPSTORE_ISSUER_ID"
