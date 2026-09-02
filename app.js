@@ -510,6 +510,20 @@ function renderBrand() {
       Sponsored by <strong>${BRAND.name}</strong>${BRAND.tagline ? ` — ${BRAND.tagline}` : ""}
       ${site ? ` · <a href="${BRAND.url}" target="_blank" rel="noopener">${site}</a>` : ""}
     </span>`;
+
+  // Direct Android download — web only: hidden inside the native app itself
+  // and in embedded previews, where the link is dead weight.
+  const isNative = typeof window.Capacitor !== "undefined";
+  const isPreview = typeof PREVIEW_NO_NETWORK !== "undefined";
+  const isWeb = location.protocol.startsWith("http") && !isNative && !isPreview;
+  if (isWeb) {
+    const dl = document.createElement("a");
+    dl.className = "apk-link";
+    dl.href = "bjj-tracker.apk";
+    dl.textContent = "📲 Get the Android app";
+    dl.title = "Download the Android app (APK) — installs like a regular app";
+    host.appendChild(dl);
+  }
 }
 
 function renderSignup() {

@@ -74,33 +74,49 @@ Then re-archive and upload in Xcode.
 
 ## Android / Google Play
 
-Android does NOT require a Mac — Android Studio runs on Windows, macOS, or Linux.
+Android does NOT require a Mac. The `android/` project is checked into this
+repo, already configured: app id `com.jeff1820.bjjtracker`, belt launcher
+icons, and a release signing config that reads
+`keystore/bjj-tracker-release.keystore` (NOT in git — keep the keystore file
+and its password backed up privately; losing it means you can never update
+the Play Store app).
 
 | Requirement | Cost / notes |
 | --- | --- |
 | Google Play developer account | $25 one-time — play.google.com/console |
-| Android Studio | free — developer.android.com/studio |
+| JDK 17+ and Android SDK (or Android Studio) | free |
 | Node.js | free |
+
+Build from the command line (no Android Studio needed):
 
 ```bash
 npm install
-npm run android:init   # creates the android/ project
-npm run android:open   # opens it in Android Studio
+npm run build:store                    # www/ with the teaser gate
+npx cap sync android
+cd android && ./gradlew assembleRelease bundleRelease
+# → app/build/outputs/apk/release/app-release.apk      (direct install)
+# → app/build/outputs/bundle/release/app-release.aab   (Play Console upload)
 ```
 
-In Android Studio: run on an emulator or device to test, then
-**Build → Generate Signed App Bundle** (create a keystore when prompted —
-BACK IT UP, losing it means you can never update the app). Upload the .aab
-in the Play Console, fill in the listing (screenshots, privacy policy,
-data-safety form declaring email collection for marketing), and submit.
-Play review usually takes hours to a day.
+Upload the .aab in the Play Console, fill in the listing (screenshots,
+privacy policy, data-safety form declaring email collection for marketing),
+and submit. Play review usually takes hours to a day.
+
+**Direct distribution (sideloading)**: the signed APK installs on any
+Android phone — send the file directly, or share the download link on the
+web app (the "Get the Android app" button, served from `bjj-tracker.apk` in
+the repo root). First-time installers get a one-time "allow installs from
+this source" prompt; that's normal for apps outside the Play Store.
 
 ### After every app update
 
 ```bash
-npm run android:sync
+npm run build:store && npx cap sync android
 ```
-Then regenerate the signed bundle and upload.
+Bump `versionCode` (and `versionName`) in `android/app/build.gradle`, rebuild
+(`./gradlew assembleRelease bundleRelease`), re-upload the .aab to Play, and
+replace `bjj-tracker.apk` in the repo root so the direct-download link serves
+the new build.
 
 ---
 
